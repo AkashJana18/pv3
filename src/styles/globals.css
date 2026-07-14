@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-line: var(--line);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@utility screen-line-bottom {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    height: 1px;
+    background: var(--line);
+  }
+}
+
+@utility screen-line-top {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    height: 1px;
+    background: var(--line);
+  }
+}
+
+@utility diagonal-stripes {
+  background-image: repeating-linear-gradient(
+    315deg,
+    color-mix(in oklab, var(--line) 56%, transparent) 0,
+    color-mix(in oklab, var(--line) 56%, transparent) 1px,
+    transparent 0,
+    transparent 50%
+  );
+  background-size: 10px 10px;
+}
+
+@utility stripe-divider {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: repeating-linear-gradient(
+      315deg,
+      color-mix(in oklab, var(--line) 56%, transparent) 0,
+      color-mix(in oklab, var(--line) 56%, transparent) 1px,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 10px 10px;
+  }
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.141 0.005 285.823);
+  --primary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --border: oklch(0.92 0.004 286.32);
+  --line: color-mix(in oklab, var(--border) 64%, var(--background));
+  --ring: oklch(0.705 0.015 286.067);
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.141 0.005 285.823);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --card: oklch(0.18 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --border: oklch(0.274 0.006 286.033);
+  --line: color-mix(in oklab, var(--border) 64%, var(--background));
+  --ring: oklch(0.552 0.016 285.938);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    overflow-wrap: break-word;
+  }
+
+  ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
+
+  :focus-visible {
+    outline: none;
+  }
+}
+
+@layer components {
+  .page-enter {
+    animation: page-enter 420ms var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1))
+      both;
+  }
+
+  .magnetic-button {
+    transform: translateZ(0);
+  }
+
+  .noise {
+    background-image: radial-gradient(
+        circle at 1px 1px,
+        color-mix(in oklab, var(--foreground) 8%, transparent) 1px,
+        transparent 0
+      );
+    background-size: 22px 22px;
+  }
+
+  .panel-link {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: var(--card);
+    padding-inline: 0.75rem;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    font-weight: var(--font-weight-medium);
+    transition:
+      color 150ms var(--ease-out),
+      background-color 150ms var(--ease-out),
+      transform 150ms var(--ease-out);
+
+    &:hover {
+      background: var(--muted);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      box-shadow:
+        0 0 0 2px var(--background),
+        0 0 0 4px var(--ring);
+    }
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
