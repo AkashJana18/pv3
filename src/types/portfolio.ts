@@ -25,6 +25,7 @@ export type PortfolioConfig = {
     summary: string
     location: string
     avatarUrl: string
+    resumeUrl?: string
   }
   about: string[]
   currentFocus: string[]

@@ -76,38 +76,3 @@ export function ExperiencePanel() {
     </Panel>
   )
 }
-
-export function ContactPanel() {
-  return (
-    <Panel id="contact">
-      <PanelHeader>
-        <PanelTitle>Contact</PanelTitle>
-        <PanelDescription>
-          Open to Rust and Solana engineering opportunities.
-        </PanelDescription>
-      </PanelHeader>
-      <PanelContent>
-        <div className="flex flex-wrap gap-2">
-          {portfolioConfig.socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="panel-link"
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel={
-                link.href.startsWith("http") ? "noreferrer noopener" : undefined
-              }
-            >
-              {link.label}
-              {link.handle ? (
-                <span className="font-mono text-xs text-muted-foreground">
-                  {link.handle}
-                </span>
-              ) : null}
-            </a>
-          ))}
-        </div>
-      </PanelContent>
-    </Panel>
-  )
-}

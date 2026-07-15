@@ -48,7 +48,8 @@ export const portfolioConfig = {
     summary:
       "Building high-performance trading infrastructure, developer tools, and open-source software. Currently exploring Solana security and low-latency systems.",
     location: "India",
-    avatarUrl: `https://github.com/${env.GITHUB_USERNAME}.png`,
+    avatarUrl: "/okarun.jpg",
+    resumeUrl: env.RESUME_URL,
   },
   about: [
     "I build systems where correctness, latency, and developer ergonomics matter. Most of my current work sits around Rust, Solana, trading infrastructure, and tools that make technical workflows sharper.",

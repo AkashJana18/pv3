@@ -4,23 +4,23 @@ export const portfolioNavigation = [
     label: "Home",
   },
   {
+    id: "github-activity",
+    label: "GitHub activity",
+  },
+  {
     id: "projects",
     label: "Projects",
   },
   {
-    id: "github-activity",
-    label: "Open Source",
+    id: "blog",
+    label: "Blog",
   },
   {
-    id: "writing",
-    label: "Writing",
+    id: "experience",
+    label: "Experience",
   },
   {
-    id: "about",
-    label: "About",
-  },
-  {
-    id: "contact",
+    id: "footer",
     label: "Contact",
   },
 ] as const

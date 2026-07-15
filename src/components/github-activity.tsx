@@ -33,26 +33,26 @@ export function GitHubActivity({
         <PanelTitle>GitHub activity</PanelTitle>
       </PanelHeader>
       <PanelContent className="p-0">
-        <div className="border-b border-line px-4 py-4 sm:px-5">
+        <div className="border-b border-line px-4 py-3 sm:px-5">
           <p className="sr-only">
             {activity.calendar.totalContributions.toLocaleString("en")} GitHub
             contributions in the past year.
           </p>
           <div className="no-scrollbar overflow-x-auto">
-            <div className="min-w-[844px]">
-              <div className="relative mb-2 h-4 font-mono text-[0.65rem] text-muted-foreground">
+            <div className="min-w-[634px]">
+              <div className="relative mb-1.5 h-3.5 font-mono text-[0.6rem] text-muted-foreground">
                 {monthMarkers.map((marker) => (
                   <span
                     key={marker.label + "-" + marker.weekIndex}
                     className="absolute"
-                    style={{ left: marker.weekIndex * 16 }}
+                    style={{ left: marker.weekIndex * 12 }}
                   >
                     {marker.label}
                   </span>
                 ))}
               </div>
               <div
-                className="grid auto-cols-3 grid-flow-col grid-rows-7 gap-1"
+                className="grid auto-cols-[0.625rem] grid-flow-col grid-rows-7 gap-0.5"
                 aria-hidden="true"
               >
                 {activity.calendar.weeks.flatMap((week) =>
@@ -67,7 +67,7 @@ export function GitHubActivity({
                         formatDate(day.date)
                       }
                       className={cn(
-                        "size-3 rounded-[2px]",
+                        "size-2.5 rounded-[2px]",
                         contributionLevelClasses[day.level]
                       )}
                     />
@@ -78,8 +78,8 @@ export function GitHubActivity({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 px-4 py-3 text-xs text-muted-foreground sm:px-5">
-          <p>
+        <div className="flex flex-wrap items-center gap-3 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
+          <p className="font-mono">
             {activity.calendar.totalContributions.toLocaleString("en")}{" "}
             contributions in the past year
           </p>
@@ -88,19 +88,19 @@ export function GitHubActivity({
 
         {activity.pullRequests.length ? (
           <div className="border-t border-line">
-            <h3 className="px-4 pt-4 font-mono text-xs tracking-[0.16em] text-muted-foreground uppercase sm:px-5">
+            <h3 className="px-4 pt-3 font-mono text-xs tracking-[0.16em] text-muted-foreground uppercase sm:px-5">
               Latest merged pull requests
             </h3>
             <div className="mt-3 divide-y divide-line">
-              {activity.pullRequests.map((pullRequest) => (
+              {activity.pullRequests.slice(0, 4).map((pullRequest) => (
                 <a
                   key={pullRequest.id}
                   href={pullRequest.url}
-                  className="group flex min-w-0 items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset sm:px-5"
+                  className="group flex min-w-0 items-center gap-3 px-4 py-2.5 transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset sm:px-5"
                   {...externalLinkProps}
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-muted text-muted-foreground">
-                    <GitPullRequest className="size-4" aria-hidden="true" />
+                  <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-line bg-muted text-muted-foreground">
+                    <GitPullRequest className="size-3.5" aria-hidden="true" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">
@@ -130,7 +130,7 @@ function ContributionLegend() {
     <div className="ml-auto flex items-center gap-1" aria-hidden="true">
       <span>Less</span>
       {contributionLevelClasses.map((className, index) => (
-        <span key={index} className={cn("size-3 rounded-[2px]", className)} />
+        <span key={index} className={cn("size-2.5 rounded-[2px]", className)} />
       ))}
       <span>More</span>
     </div>

@@ -4,11 +4,9 @@ import { getLatestWriting } from "@/lib/writing"
 import { GitHubActivity } from "@/components/github-activity"
 import {
   AboutPanel,
-  ContactPanel,
   CurrentlyPanel,
   ExperiencePanel,
 } from "@/components/info-panels"
-import { OverviewGrid } from "@/components/overview-grid"
 import { StripeDivider } from "@/components/panel"
 import { ProfileHeader } from "@/components/profile-header"
 import { ProjectList } from "@/components/project-list"
@@ -37,7 +35,6 @@ export default async function HomePage() {
       ))}
 
       <ProfileHeader />
-      <OverviewGrid />
       <StripeDivider />
 
       <AboutPanel />
@@ -56,9 +53,6 @@ export default async function HomePage() {
       <StripeDivider />
 
       <ExperiencePanel />
-      <StripeDivider />
-
-      <ContactPanel />
     </main>
   )
 }

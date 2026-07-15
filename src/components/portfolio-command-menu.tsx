@@ -3,7 +3,10 @@
 import { useEffect, useRef } from "react"
 import {
   ArrowUpRight,
+  BookOpen,
+  BriefcaseBusiness,
   FolderGit2,
+  GitPullRequest,
   House,
   Mail,
   Moon,
@@ -161,7 +164,19 @@ function NavigationIcon({ sectionId }: { sectionId: PortfolioSectionId }) {
     return <House />
   }
 
-  if (sectionId === "contact") {
+  if (sectionId === "github-activity") {
+    return <GitPullRequest />
+  }
+
+  if (sectionId === "blog") {
+    return <BookOpen />
+  }
+
+  if (sectionId === "experience") {
+    return <BriefcaseBusiness />
+  }
+
+  if (sectionId === "footer") {
     return <Mail />
   }
 

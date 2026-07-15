@@ -2,13 +2,14 @@
 
 import { lazy, Suspense, useCallback, useEffect, useState } from "react"
 import {
-  FilePenLine,
+  BookOpen,
+  BriefcaseBusiness,
   FolderGit2,
   GitPullRequest,
   House,
   Mail,
-  Search,
-  UserRound,
+  Moon,
+  SunMedium,
 } from "lucide-react"
 import {
   AnimatePresence,
@@ -32,6 +33,7 @@ type DockOrientation = "desktop" | "mobile"
 
 const DOCK_VISIBILITY_KEY = "portfolio-dock-hidden"
 const DOCK_SHORTCUT_HINT_KEY = "portfolio-dock-shortcut-hint-seen"
+const THEME_WIPE_DURATION = 420
 
 export function SiteDock() {
   const [activeSection, setActiveSection] = useState<PortfolioSectionId>("hero")
@@ -40,6 +42,7 @@ export function SiteDock() {
   const [shortcutHint, setShortcutHint] = useState<string | null>(null)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [theme, setTheme] = useState<Theme>("dark")
+  const [themeWipe, setThemeWipe] = useState<Theme | null>(null)
   const [reducedAudio, setReducedAudio] = useState(false)
   const reduceMotion = useReducedMotion()
 
@@ -176,7 +179,7 @@ export function SiteDock() {
       window.history.replaceState(null, "", "#" + sectionId)
       section.scrollIntoView({
         behavior: reduceMotion ? "auto" : "smooth",
-        block: "start",
+        block: sectionId === "footer" ? "end" : "start",
       })
     },
     [reduceMotion]
@@ -186,10 +189,23 @@ export function SiteDock() {
     const nextTheme = theme === "dark" ? "light" : "dark"
 
     localStorage.setItem("theme", nextTheme)
-    applyTheme(nextTheme)
-    setTheme(nextTheme)
+    if (reduceMotion) {
+      applyTheme(nextTheme)
+      setTheme(nextTheme)
+      return
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("portfolio-theme-change", { detail: nextTheme })
+    )
+    setThemeWipe(nextTheme)
+    window.setTimeout(() => {
+      applyTheme(nextTheme)
+      setTheme(nextTheme)
+      setThemeWipe(null)
+    }, THEME_WIPE_DURATION)
     playClick(soundEnabled && !reducedAudio)
-  }, [reducedAudio, soundEnabled, theme])
+  }, [reduceMotion, reducedAudio, soundEnabled, theme])
 
   const toggleSound = useCallback(() => {
     if (reducedAudio) {
@@ -205,7 +221,7 @@ export function SiteDock() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="fixed top-1/2 right-4 z-50 hidden -translate-y-1/2 md:block">
+      <div className="fixed top-1/2 right-[max(1rem,calc((100vw-48rem)/2-4.5rem))] z-50 hidden -translate-y-1/2 md:block">
         <motion.nav
           aria-hidden={dockHidden}
           aria-label="Site navigation"
@@ -221,8 +237,9 @@ export function SiteDock() {
             activeSection={activeSection}
             disabled={dockHidden}
             onNavigate={navigateToSection}
-            onOpenPalette={() => setPaletteOpen(true)}
+            onToggleTheme={toggleTheme}
             orientation="desktop"
+            theme={theme}
           />
         </motion.nav>
       </div>
@@ -243,13 +260,30 @@ export function SiteDock() {
             activeSection={activeSection}
             disabled={dockHidden}
             onNavigate={navigateToSection}
-            onOpenPalette={() => setPaletteOpen(true)}
+            onToggleTheme={toggleTheme}
             orientation="mobile"
+            theme={theme}
           />
         </motion.nav>
       </div>
 
       <AnimatePresence>
+        {themeWipe ? (
+          <motion.div
+            key={themeWipe}
+            aria-hidden="true"
+            initial={{ clipPath: "inset(0 0 0 100%)" }}
+            animate={{ clipPath: "inset(0 0 0 0)" }}
+            transition={{
+              duration: THEME_WIPE_DURATION / 1000,
+              ease: "easeOut",
+            }}
+            className="pointer-events-none fixed inset-0 z-[80]"
+            style={{
+              backgroundColor: themeWipe === "dark" ? "#09090b" : "#fff",
+            }}
+          />
+        ) : null}
         {shortcutHint ? (
           <motion.p
             key="dock-shortcut-hint"
@@ -284,14 +318,16 @@ function DockSurface({
   activeSection,
   disabled,
   onNavigate,
-  onOpenPalette,
+  onToggleTheme,
   orientation,
+  theme,
 }: {
   activeSection: PortfolioSectionId
   disabled: boolean
   onNavigate: (sectionId: PortfolioSectionId) => void
-  onOpenPalette: () => void
+  onToggleTheme: () => void
   orientation: DockOrientation
+  theme: Theme
 }) {
   const isDesktop = orientation === "desktop"
 
@@ -323,11 +359,11 @@ function DockSurface({
       />
       <DockButton
         disabled={disabled}
-        label="Search"
+        label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
         orientation={orientation}
-        onClick={onOpenPalette}
+        onClick={onToggleTheme}
       >
-        <Search />
+        {theme === "dark" ? <SunMedium /> : <Moon />}
       </DockButton>
     </div>
   )
@@ -407,12 +443,12 @@ function NavigationIcon({ sectionId }: { sectionId: PortfolioSectionId }) {
     return <GitPullRequest className="size-4.5" aria-hidden="true" />
   }
 
-  if (sectionId === "writing") {
-    return <FilePenLine className="size-4.5" aria-hidden="true" />
+  if (sectionId === "blog") {
+    return <BookOpen className="size-4.5" aria-hidden="true" />
   }
 
-  if (sectionId === "about") {
-    return <UserRound className="size-4.5" aria-hidden="true" />
+  if (sectionId === "experience") {
+    return <BriefcaseBusiness className="size-4.5" aria-hidden="true" />
   }
 
   return <Mail className="size-4.5" aria-hidden="true" />
@@ -424,6 +460,9 @@ function applyTheme(theme: Theme) {
   document
     .querySelector('meta[name="theme-color"]')
     ?.setAttribute("content", theme === "dark" ? "#09090b" : "#ffffff")
+  window.dispatchEvent(
+    new CustomEvent("portfolio-theme-change", { detail: theme })
+  )
 }
 
 function playClick(enabled: boolean) {

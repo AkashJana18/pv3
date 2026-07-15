@@ -36,6 +36,7 @@ const envSchema = z.object({
   PROFILE_X_URL: optionalUrl,
   PROFILE_DEVTO_URL: optionalUrl,
   PROFILE_MEDIUM_URL: optionalUrl,
+  RESUME_URL: optionalUrl,
 })
 
 export const env = envSchema.parse({
@@ -50,4 +51,5 @@ export const env = envSchema.parse({
   PROFILE_X_URL: process.env.PROFILE_X_URL,
   PROFILE_DEVTO_URL: process.env.PROFILE_DEVTO_URL,
   PROFILE_MEDIUM_URL: process.env.PROFILE_MEDIUM_URL,
+  RESUME_URL: process.env.RESUME_URL,
 })

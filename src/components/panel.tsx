@@ -23,7 +23,7 @@ export function PanelHeader({
   return (
     <header
       data-slot="panel-header"
-      className={cn("screen-line-bottom px-4 py-4 sm:px-5", className)}
+      className={cn("screen-line-bottom px-4 py-3 sm:px-5", className)}
       {...props}
     />
   )
@@ -39,7 +39,7 @@ export function PanelTitle({
     <h2
       data-slot="panel-title"
       className={cn(
-        "text-2xl font-semibold tracking-tight text-balance sm:text-3xl",
+        "text-xl font-semibold tracking-tight text-balance sm:text-2xl",
         className
       )}
       {...props}
@@ -62,7 +62,7 @@ export function PanelDescription({
     <p
       data-slot="panel-description"
       className={cn(
-        "mt-3 max-w-2xl text-sm leading-6 text-muted-foreground",
+        "mt-2 max-w-2xl text-sm leading-6 text-muted-foreground",
         className
       )}
       {...props}
@@ -77,7 +77,7 @@ export function PanelContent({
   return (
     <div
       data-slot="panel-body"
-      className={cn("p-4 sm:p-5", className)}
+      className={cn("p-3 sm:p-4", className)}
       {...props}
     />
   )
@@ -86,7 +86,7 @@ export function PanelContent({
 export function StripeDivider() {
   return (
     <div
-      className="stripe-divider h-8 border-x border-line"
+      className="stripe-divider h-4 border-x border-line"
       aria-hidden="true"
     />
   )
