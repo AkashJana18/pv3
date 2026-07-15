@@ -1,10 +1,9 @@
 import { ArrowUpRight, GitPullRequest } from "lucide-react"
 
-import type {
-  GitHubContributionCalendar,
-  GitHubPortfolio,
-} from "@/types/github"
-import { cn, externalLinkProps, formatDate } from "@/lib/utils"
+import type { GitHubPortfolio } from "@/types/github"
+import { portfolioConfig } from "@/config/portfolio"
+import { externalLinkProps, formatDate } from "@/lib/utils"
+import { GitHubContributions } from "@/components/github-contributions"
 import {
   Panel,
   PanelContent,
@@ -12,20 +11,12 @@ import {
   PanelTitle,
 } from "@/components/panel"
 
-const contributionLevelClasses = [
-  "bg-muted",
-  "bg-muted-foreground/20",
-  "bg-muted-foreground/40",
-  "bg-muted-foreground/60",
-  "bg-muted-foreground/80",
-] as const
-
 export function GitHubActivity({
   activity,
 }: {
   activity: GitHubPortfolio["activity"]
 }) {
-  const monthMarkers = getMonthMarkers(activity.calendar)
+  const contributions = activity.calendar.weeks.flatMap((week) => week)
 
   return (
     <Panel id="github-activity">
@@ -34,56 +25,19 @@ export function GitHubActivity({
       </PanelHeader>
       <PanelContent className="p-0">
         <div className="border-b border-line px-4 py-3 sm:px-5">
-          <p className="sr-only">
-            {activity.calendar.totalContributions.toLocaleString("en")} GitHub
-            contributions in the past year.
-          </p>
-          <div className="no-scrollbar overflow-x-auto">
-            <div className="min-w-[634px]">
-              <div className="relative mb-1.5 h-3.5 font-mono text-[0.6rem] text-muted-foreground">
-                {monthMarkers.map((marker) => (
-                  <span
-                    key={marker.label + "-" + marker.weekIndex}
-                    className="absolute"
-                    style={{ left: marker.weekIndex * 12 }}
-                  >
-                    {marker.label}
-                  </span>
-                ))}
-              </div>
-              <div
-                className="grid auto-cols-[0.625rem] grid-flow-col grid-rows-7 gap-0.5"
-                aria-hidden="true"
-              >
-                {activity.calendar.weeks.flatMap((week) =>
-                  week.map((day) => (
-                    <span
-                      key={day.date}
-                      title={
-                        day.count +
-                        " contribution" +
-                        (day.count === 1 ? "" : "s") +
-                        " on " +
-                        formatDate(day.date)
-                      }
-                      className={cn(
-                        "size-2.5 rounded-[2px]",
-                        contributionLevelClasses[day.level]
-                      )}
-                    />
-                  ))
-                )}
-              </div>
+          {contributions.length ? (
+            <GitHubContributions
+              contributions={contributions}
+              githubProfileUrl={`https://github.com/${portfolioConfig.github.username}`}
+            />
+          ) : (
+            <div className="py-10 text-center">
+              <p className="text-sm font-medium">No public contributions yet</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                GitHub activity will appear here when it is available.
+              </p>
             </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
-          <p className="font-mono">
-            {activity.calendar.totalContributions.toLocaleString("en")}{" "}
-            contributions in the past year
-          </p>
-          <ContributionLegend />
+          )}
         </div>
 
         {activity.pullRequests.length ? (
@@ -112,7 +66,7 @@ export function GitHubActivity({
                     </span>
                   </span>
                   <ArrowUpRight
-                    className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+                    className="size-4 shrink-0 text-muted-foreground transition-transform duration-150 ease-out motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 motion-reduce:transition-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -123,40 +77,4 @@ export function GitHubActivity({
       </PanelContent>
     </Panel>
   )
-}
-
-function ContributionLegend() {
-  return (
-    <div className="ml-auto flex items-center gap-1" aria-hidden="true">
-      <span>Less</span>
-      {contributionLevelClasses.map((className, index) => (
-        <span key={index} className={cn("size-2.5 rounded-[2px]", className)} />
-      ))}
-      <span>More</span>
-    </div>
-  )
-}
-
-function getMonthMarkers(calendar: GitHubContributionCalendar) {
-  let previousMonth = ""
-
-  return calendar.weeks.flatMap((week, weekIndex) => {
-    const firstDay = week[0]
-
-    if (!firstDay) {
-      return []
-    }
-
-    const label = new Intl.DateTimeFormat("en", { month: "short" }).format(
-      new Date(firstDay.date)
-    )
-
-    if (label === previousMonth) {
-      return []
-    }
-
-    previousMonth = label
-
-    return { label, weekIndex }
-  })
 }

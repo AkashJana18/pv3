@@ -14,7 +14,9 @@ export function WritingList({ result }: { result: WritingResult }) {
   return (
     <Panel id="blog">
       <PanelHeader>
-        <PanelTitle count={result.articles.length}>Latest blog posts</PanelTitle>
+        <PanelTitle count={result.articles.length}>
+          Latest blog posts
+        </PanelTitle>
       </PanelHeader>
       <PanelContent className="p-0">
         {result.articles.length ? (

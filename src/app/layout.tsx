@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next"
 import { portfolioConfig } from "@/config/portfolio"
 import { fontVariables } from "@/lib/fonts"
 import { getWritingRssLinks } from "@/lib/writing"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { SiteDock } from "@/components/site-dock"
 import { SiteFooter } from "@/components/site-footer"
 
@@ -123,21 +124,23 @@ export default function RootLayout({
         ))}
       </head>
       <body>
-        <a
-          href="#content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
-        >
-          Skip to content
-        </a>
-        <div
-          className="noise fixed inset-0 -z-10 opacity-[0.22]"
-          aria-hidden="true"
-        />
-        <div className="mx-auto w-full max-w-3xl overflow-x-clip px-2 pt-2 pb-24 md:pt-4 md:pb-0">
-          {children}
-          <SiteFooter />
-        </div>
-        <SiteDock />
+        <TooltipProvider>
+          <a
+            href="#content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+          >
+            Skip to content
+          </a>
+          <div
+            className="noise fixed inset-0 -z-10 opacity-[0.22]"
+            aria-hidden="true"
+          />
+          <div className="mx-auto w-full max-w-3xl overflow-x-clip px-2 pt-2 pb-24 md:pt-4 md:pb-0">
+            {children}
+            <SiteFooter />
+          </div>
+          <SiteDock />
+        </TooltipProvider>
       </body>
     </html>
   )

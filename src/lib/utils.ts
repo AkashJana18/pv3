@@ -1,8 +1,9 @@
-import type { ClassValue } from "clsx"
-import { clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
 
 export const absoluteUrl = (path = "/") => {
   const url = new URL(path, process.env.SITE_URL ?? "https://akashjana.dev")

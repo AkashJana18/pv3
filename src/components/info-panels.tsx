@@ -6,6 +6,7 @@ import {
   PanelHeader,
   PanelTitle,
 } from "@/components/panel"
+import { WorkExperience } from "@/components/work-experience"
 
 export function AboutPanel() {
   return (
@@ -53,25 +54,38 @@ export function CurrentlyPanel() {
 }
 
 export function ExperiencePanel() {
+  const experiences = portfolioConfig.experience.map((item) => ({
+    id: item.organization.toLowerCase().replaceAll(" ", "-"),
+    companyName: item.organization,
+    companyWebsite: item.organizationUrl,
+    isCurrentEmployer: item.period === "Current",
+    positions: [
+      {
+        id: `${item.organization}-${item.role}`
+          .toLowerCase()
+          .replaceAll(" ", "-"),
+        title: item.role,
+        employmentPeriod: { label: item.period },
+        employmentType: item.employmentType,
+        description: item.description,
+        skills: item.highlights,
+        isExpanded: item.organization === "Freelance",
+      },
+    ],
+  }))
+
   return (
     <Panel id="experience">
       <PanelHeader>
         <PanelTitle count={portfolioConfig.experience.length}>
-          Experience and community
+          Experience
         </PanelTitle>
       </PanelHeader>
-      <PanelContent className="grid gap-3 sm:grid-cols-2">
-        {portfolioConfig.experience.map((item) => (
-          <article
-            key={item.title}
-            className="rounded-xl border border-line p-4"
-          >
-            <h3 className="font-semibold tracking-tight">{item.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              {item.description}
-            </p>
-          </article>
-        ))}
+      <PanelContent className="p-0">
+        <WorkExperience
+          className="bg-transparent px-4 sm:px-5"
+          experiences={experiences}
+        />
       </PanelContent>
     </Panel>
   )

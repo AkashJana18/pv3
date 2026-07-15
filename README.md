@@ -5,6 +5,7 @@ Minimal Next.js portfolio for Akash Jana, focused on Rust, Solana, trading infra
 ## Integrations
 
 - GitHub pinned repositories are fetched server-side through the GitHub GraphQL API when `GITHUB_TOKEN` is available.
+- Each project can be starred through GitHub. The portfolio provides immediate local feedback, then refreshes the public GitHub count when the visitor returns.
 - DEV.to articles are fetched server-side through the DEV.to API.
 - Medium articles are fetched server-side through a configurable RSS feed.
 - All external data has cached revalidation and local fallbacks so production builds do not depend on third-party availability.

@@ -63,25 +63,61 @@ export const portfolioConfig = {
   ],
   experience: [
     {
-      title: "Superteam Solana Fellowship",
-      description: "Building and learning in the Solana ecosystem.",
-    },
-    {
-      title: "Protocol Labs Dev Guild contributor",
-      description: "Contributing to open developer tooling and community work.",
-    },
-    {
-      title: "Former Community Manager at Storacha",
-      description: "Supported developer/community operations.",
-    },
-    {
-      title: "Devcon volunteer",
-      description: "Helped support the Ethereum developer community event.",
-    },
-    {
-      title: "Open-source contributor",
+      organization: "Freelance",
+      role: "Independent Developer",
+      period: "Current",
+      employmentType: "Self-employed",
       description:
-        "Maintaining and publishing experiments across Rust and Web3.",
+        "Building decentralized applications and technical writing at the intersection of Web3, AI, and frontend engineering.",
+      highlights: ["Web3", "AI", "Frontend"],
+    },
+    {
+      organization: "ETHMumbai",
+      role: "Volunteer",
+      period: "Mar 2026",
+      employmentType: "Volunteer",
+      description:
+        "Supported an on-the-ground Ethereum community event and its developer ecosystem.",
+      highlights: ["Ethereum", "Community"],
+    },
+    {
+      organization: "Resourcio Community",
+      role: "Project Administrator",
+      period: "Mar — Apr 2025",
+      employmentType: "Volunteer",
+      description:
+        "Guided participants through contributing to Statify, providing onboarding, support, and direction for effective open-source contributions.",
+      highlights: ["Open source", "Mentorship"],
+    },
+    {
+      organization: "Superteam",
+      organizationUrl: "https://superteam.fun/",
+      role: "Solana Fellow",
+      period: "Community",
+      employmentType: "Fellowship",
+      description:
+        "Building and learning with the global Solana community through a focused fellowship.",
+      highlights: ["Solana", "Rust"],
+    },
+    {
+      organization: "Storacha",
+      organizationUrl: "https://storacha.network/",
+      role: "Community Manager",
+      period: "Former",
+      employmentType: "Community",
+      description:
+        "Supported developer and community operations for decentralized storage.",
+      highlights: ["Developer community", "Decentralized storage"],
+    },
+    {
+      organization: "Protocol Labs Dev Guild",
+      organizationUrl: "https://protocol.ai/",
+      role: "Open-source Contributor",
+      period: "Community",
+      employmentType: "Contributor",
+      description:
+        "Contributing to open developer tooling and community-led technical work.",
+      highlights: ["Developer tooling", "Open source"],
     },
   ],
   socialLinks: [

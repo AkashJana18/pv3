@@ -12,8 +12,6 @@ import {
   Moon,
   Search,
   SunMedium,
-  Volume2,
-  VolumeX,
 } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 
@@ -35,18 +33,14 @@ type Theme = "light" | "dark"
 type PortfolioCommandMenuProps = {
   onClose: () => void
   onNavigate: (sectionId: PortfolioSectionId) => void
-  onToggleSound: () => void
   onToggleTheme: () => void
-  soundEnabled: boolean
   theme: Theme
 }
 
 export default function PortfolioCommandMenu({
   onClose,
   onNavigate,
-  onToggleSound,
   onToggleTheme,
-  soundEnabled,
   theme,
 }: PortfolioCommandMenuProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -141,16 +135,6 @@ export default function PortfolioCommandMenu({
                   Switch to {theme === "dark" ? "light" : "dark"} theme
                 </span>
               </CommandItem>
-              <CommandItem
-                value="Toggle click sounds"
-                onSelect={() => {
-                  onToggleSound()
-                  onClose()
-                }}
-              >
-                {soundEnabled ? <Volume2 /> : <VolumeX />}
-                <span>{soundEnabled ? "Disable" : "Enable"} click sounds</span>
-              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>
@@ -164,12 +148,20 @@ function NavigationIcon({ sectionId }: { sectionId: PortfolioSectionId }) {
     return <House />
   }
 
+  if (sectionId === "about") {
+    return <BriefcaseBusiness />
+  }
+
   if (sectionId === "github-activity") {
     return <GitPullRequest />
   }
 
   if (sectionId === "blog") {
     return <BookOpen />
+  }
+
+  if (sectionId === "currently") {
+    return <GitPullRequest />
   }
 
   if (sectionId === "experience") {

@@ -111,7 +111,7 @@ export function ThemeAvatar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "group/avatar relative isolate size-20 overflow-hidden rounded-xl border border-line bg-muted",
+        "group/avatar relative isolate size-32 overflow-hidden rounded-2xl border border-line bg-muted sm:size-36",
         className
       )}
       onPointerEnter={() => {
@@ -204,7 +204,7 @@ function AvatarLayer({
         src={images.base}
         alt={decorative ? "" : "Akash Jana's avatar"}
         fill
-        sizes="80px"
+        sizes="144px"
         className="object-cover"
       />
       {!missingPortrait && portraitReady ? (
@@ -219,7 +219,7 @@ function AvatarLayer({
             alt=""
             aria-hidden="true"
             fill
-            sizes="80px"
+            sizes="144px"
             className="object-cover"
           />
         </motion.div>

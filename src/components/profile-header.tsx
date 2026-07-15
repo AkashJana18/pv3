@@ -15,7 +15,9 @@ import {
 
 import { portfolioConfig } from "@/config/portfolio"
 import { externalLinkProps } from "@/lib/utils"
+import { GlowCardFrame, GlowCardGrid } from "@/components/glow-card-grid"
 import { ThemeAvatar } from "@/components/theme-avatar"
+import { TypewriterRole } from "@/components/typewriter-role"
 
 const profileFacts = [
   {
@@ -46,10 +48,14 @@ export function ProfileHeader() {
   return (
     <section
       id="hero"
-      className="screen-line-bottom grid overflow-hidden border-x border-line sm:grid-cols-[9.5rem_minmax(0,1fr)]"
+      className="screen-line-bottom grid overflow-hidden border-x border-line sm:grid-cols-[11rem_minmax(0,1fr)]"
     >
       <aside className="flex items-center gap-3 border-b border-line p-3 sm:flex-col sm:items-start sm:justify-between sm:border-r sm:border-b-0">
-        <ThemeAvatar className="z-[90] shrink-0" />
+        <GlowCardGrid className="block w-auto" cardRadius={16}>
+          <GlowCardFrame className="rounded-2xl">
+            <ThemeAvatar className="z-[90] shrink-0" />
+          </GlowCardFrame>
+        </GlowCardGrid>
         <p className="max-w-24 font-mono text-[0.65rem] leading-4 tracking-[0.16em] text-muted-foreground uppercase">
           Available for engineering roles
         </p>
@@ -58,7 +64,7 @@ export function ProfileHeader() {
       <div className="min-w-0">
         <header className="border-b border-line px-4 py-3 sm:px-5">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h1 className="name-shimmer text-3xl font-semibold tracking-tight sm:text-4xl">
               {portfolioConfig.person.name}
             </h1>
             <BadgeCheck
@@ -66,9 +72,7 @@ export function ProfileHeader() {
               aria-label="Verified profile"
             />
           </div>
-          <p className="mt-1 font-mono text-xs text-muted-foreground sm:text-sm">
-            {portfolioConfig.person.role}
-          </p>
+          <TypewriterRole />
         </header>
 
         <p className="px-4 py-3 text-sm leading-6 text-muted-foreground sm:px-5 sm:text-base">

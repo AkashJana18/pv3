@@ -30,8 +30,13 @@ export type PortfolioConfig = {
   about: string[]
   currentFocus: string[]
   experience: {
-    title: string
+    organization: string
+    organizationUrl?: string
+    role: string
+    period: string
+    employmentType: string
     description: string
+    highlights?: string[]
   }[]
   socialLinks: SocialLink[]
   github: {

@@ -4,6 +4,10 @@ export const portfolioNavigation = [
     label: "Home",
   },
   {
+    id: "about",
+    label: "About",
+  },
+  {
     id: "github-activity",
     label: "GitHub activity",
   },
@@ -14,6 +18,10 @@ export const portfolioNavigation = [
   {
     id: "blog",
     label: "Blog",
+  },
+  {
+    id: "currently",
+    label: "Currently",
   },
   {
     id: "experience",
