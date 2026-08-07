@@ -1,0 +1,297 @@
+---
+import { Picture } from "astro:assets"
+
+import portraitImage from "@/assets/formal-me.jpg"
+import ContributionGraph from "@/components/ContributionGraph.astro"
+import { siteConfig } from "@/config/site"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import { loadPortfolioData } from "@/lib/data"
+import { getStructuredData } from "@/lib/structured-data"
+
+const SIX_HOURS = 60 * 60 * 6
+const ONE_DAY = 60 * 60 * 24
+
+Astro.response.headers.set(
+  "Cache-Control",
+  `public, max-age=0, s-maxage=${SIX_HOURS}, stale-while-revalidate=${ONE_DAY}`
+)
+
+const { github, writings } = await loadPortfolioData()
+const structuredData = getStructuredData({
+  projects: github.projects,
+  articles: writings.articles,
+})
+const githubUrl = `https://github.com/${siteConfig.person.githubUsername}`
+const articleDate = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "2-digit",
+})
+---
+
+<BaseLayout structuredData={structuredData}>
+  <main id="content" class="portfolio-shell">
+    <div class="portfolio-grid">
+      <header class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">Portfolio / 2026</p>
+        <h1 id="page-title">{siteConfig.person.name}</h1>
+        <p class="role">{siteConfig.person.role}</p>
+        <p class="status-line">
+          <time
+            id="india-clock"
+            data-time-zone={siteConfig.person.timeZone}
+            datetime={new Date().toISOString()}
+          >
+            {
+              new Intl.DateTimeFormat("en-IN", {
+                timeZone: siteConfig.person.timeZone,
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }).format(new Date())
+            }
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>{siteConfig.person.location}</span>
+        </p>
+        <p class="lede">{siteConfig.person.summary}</p>
+      </header>
+
+      <figure class="portrait">
+        <Picture
+          src={portraitImage}
+          alt={`Akash Jana outdoors in front of green foliage`}
+          width={900}
+          height={1125}
+          widths={[360, 540, 720, 900]}
+          sizes="(min-width: 900px) 38vw, 100vw"
+          layout="constrained"
+          fit="cover"
+          position="54% 50%"
+          formats={["avif", "webp"]}
+          fallbackFormat="webp"
+          quality="mid"
+          priority
+          onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
+        />
+      </figure>
+
+      <section class="summary section-block" aria-labelledby="summary-title">
+        <h2 id="summary-title">Summary</h2>
+        <div class="prose-stack">
+          {siteConfig.summary.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <p class="availability">
+          Available for full-stack engineering roles, including Rust and
+          Solana-focused work.
+        </p>
+      </section>
+
+      <section class="activity section-block" aria-labelledby="activity-title">
+        <div class="section-heading-row">
+          <h2 id="activity-title">GitHub activity</h2>
+          <span class="source-label">
+            {github.source === "live" ? "Updated live" : "Saved snapshot"}
+          </span>
+        </div>
+        <ContributionGraph
+          calendar={github.calendar}
+          source={github.source}
+          profileUrl={githubUrl}
+        />
+
+        {
+          github.pullRequests.length > 0 && (
+            <div class="subsection">
+              <h3>Recent merged work</h3>
+              <ul class="compact-list">
+                {github.pullRequests.map((pullRequest) => (
+                  <li>
+                    <a
+                      href={pullRequest.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {pullRequest.title}
+                      <span class="sr-only">
+                        {` in ${pullRequest.repositoryName}`}
+                      </span>
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                    <span>{pullRequest.repositoryName}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </section>
+
+      <section class="projects section-block" aria-labelledby="projects-title">
+        <h2 id="projects-title">Projects</h2>
+        {
+          github.projects.length > 0 ? (
+            <ol class="project-list">
+              {github.projects.map((project) => (
+                <li>
+                  <div class="project-line">
+                    <a
+                      href={project.homepageUrl ?? project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {project.displayName} <span aria-hidden="true">↗</span>
+                    </a>
+                    <span class="project-meta">
+                      {project.primaryLanguage ?? "Open source"}
+                      {project.stars > 0 && ` · ${project.stars}★`}
+                    </span>
+                  </div>
+                  <p>{project.description}</p>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="empty-state">
+              Project details are being refreshed. View the work directly on
+              <a href={githubUrl}>GitHub</a>.
+            </p>
+          )
+        }
+      </section>
+
+      <section class="writings section-block" aria-labelledby="writings-title">
+        <div class="section-heading-row">
+          <h2 id="writings-title">Writings</h2>
+          {
+            writings.source === "live" && (
+              <span class="source-label">Latest</span>
+            )
+          }
+        </div>
+        {
+          writings.articles.length > 0 ? (
+            <ol class="writing-list">
+              {writings.articles.map((article) => (
+                <li>
+                  <time datetime={article.publishedAt}>
+                    {articleDate.format(new Date(article.publishedAt))}
+                  </time>
+                  <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {article.title} <span aria-hidden="true">↗</span>
+                  </a>
+                  <span>{article.platform}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="empty-state">
+              New writing is on the way. In the meantime, follow my work on
+              <a href={githubUrl}>GitHub</a>.
+            </p>
+          )
+        }
+      </section>
+
+      <section
+        class="experience section-block"
+        aria-labelledby="experience-title"
+      >
+        <h2 id="experience-title">Experience</h2>
+        <ol class="experience-list">
+          {
+            siteConfig.experience.map((item) => (
+              <li>
+                <div class="experience-heading">
+                  <h3>
+                    {item.organizationUrl ? (
+                      <a
+                        href={item.organizationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.organization} <span aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      item.organization
+                    )}
+                  </h3>
+                  <span>{item.period}</span>
+                </div>
+                <p class="experience-role">{item.role}</p>
+                <p>{item.description}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+    </div>
+
+    <footer class="site-footer">
+      <nav aria-label="Connect">
+        <ul>
+          {
+            siteConfig.socialLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    link.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                >
+                  {link.label} <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))
+          }
+          {
+            siteConfig.person.resumeUrl && (
+              <li>
+                <a
+                  href={siteConfig.person.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Résumé <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </nav>
+      <span class="copyright">
+        {`© ${new Date().getFullYear()} ${siteConfig.person.name}`}
+      </span>
+    </footer>
+  </main>
+
+  <script is:inline>
+    ;(() => {
+      const clock = document.querySelector("#india-clock")
+      if (!(clock instanceof HTMLTimeElement)) return
+
+      const formatter = new Intl.DateTimeFormat("en-IN", {
+        timeZone: clock.dataset.timeZone || "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+
+      const update = () => {
+        const now = new Date()
+        clock.textContent = formatter.format(now)
+        clock.dateTime = now.toISOString()
+      }
+
+      update()
+      window.setInterval(update, 60_000)
+    })()
+  </script>
+</BaseLayout>

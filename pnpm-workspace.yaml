@@ -1,9 +1,8 @@
 onlyBuiltDependencies:
+  - esbuild
   - sharp
 
-ignoredBuiltDependencies:
-  - msw
-
 allowBuilds:
+  esbuild: true
+  inotify: true
   sharp: true
-  msw: false

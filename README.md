@@ -1,31 +1,29 @@
 # Akash Jana Portfolio
 
-Minimal Next.js portfolio for Akash Jana, focused on Rust, Solana, trading infrastructure, developer tooling, and open-source work.
+A minimal, server-rendered portfolio built with Astro, strict TypeScript, and
+scoped vanilla CSS.
 
-## Integrations
-
-- GitHub pinned repositories are fetched server-side through the GitHub GraphQL API when `GITHUB_TOKEN` is available.
-- Each project can be starred through GitHub. The portfolio provides immediate local feedback, then refreshes the public GitHub count when the visitor returns.
-- DEV.to articles are fetched server-side through the DEV.to API.
-- Medium articles are fetched server-side through a configurable RSS feed.
-- All external data has cached revalidation and local fallbacks so production builds do not depend on third-party availability.
-
-## Local setup
+## Local development
 
 ```bash
 pnpm install
-cp .env.example .env.local
 pnpm dev
 ```
 
-For live pinned repositories, set `GITHUB_TOKEN` in `.env.local`.
+Copy `.env.example` to `.env` and provide a server-only GitHub token to load
+pinned repositories, the contribution calendar, and merged pull requests. The
+site falls back to local project data if any upstream source is unavailable.
 
 ## Verification
 
 ```bash
-pnpm format:check
-pnpm lint
-pnpm check-types
+pnpm check
 pnpm test
 pnpm build
+pnpm format:check
 ```
+
+## Deployment
+
+The project uses the official Vercel adapter with six-hour ISR. Connect the
+repository to Vercel and configure the values documented in `.env.example`.

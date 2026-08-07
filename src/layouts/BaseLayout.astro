@@ -1,0 +1,67 @@
+---
+import "@/styles/global.css"
+
+import { siteConfig } from "@/config/site"
+import { serializeStructuredData } from "@/lib/structured-data"
+
+type Props = {
+  title?: string
+  description?: string
+  structuredData?: unknown[]
+}
+
+const {
+  title = siteConfig.site.title,
+  description = siteConfig.site.description,
+  structuredData = [],
+} = Astro.props
+const canonical = new URL(Astro.url.pathname, siteConfig.site.url)
+const socialImage = new URL(siteConfig.person.portraitUrl, siteConfig.site.url)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content={siteConfig.site.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta
+      property="og:image:alt"
+      content={`Portrait of ${siteConfig.person.name}`}
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+
+    {
+      structuredData.map((entry) => (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={serializeStructuredData(entry)}
+        />
+      ))
+    }
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <slot />
+  </body>
+</html>

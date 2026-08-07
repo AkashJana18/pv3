@@ -13,12 +13,14 @@ node_modules
 # testing
 coverage
 
-# next.js
-.next/
-out/
+# astro
+.astro/
+dist/
 
-# production
-build
+# legacy/generated framework output
+.next/
+.pnpm-store/
+next-env.d.ts
 
 # misc
 .DS_Store
@@ -33,10 +35,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts

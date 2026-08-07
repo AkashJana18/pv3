@@ -5,38 +5,13 @@
   "singleQuote": false,
   "trailingComma": "es5",
   "bracketSpacing": true,
-  "importOrder": [
-    "^(react/(.*)$)|^(react$)",
-    "^(next/(.*)$)|^(next$)",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^types$",
-    "^@/types/(.*)$",
-    "^@/config/(.*)$",
-    "^@/lib/(.*)$",
-    "^@/hooks/(.*)$",
-    "^@/components/ui/(.*)$",
-    "^@/components/(.*)$",
-    "^@/registry/(.*)$",
-    "^@/styles/(.*)$",
-    "^@/app/(.*)$",
-    "^@/features/(.*)$",
-    "",
-    "^[./]"
-  ],
-  "importOrderParserPlugins": [
-    "typescript",
-    "jsx",
-    "decorators-legacy"
-  ],
-  "plugins": [
-    "@ianvs/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ],
-  "tailwindFunctions": [
-    "clsx",
-    "cn",
-    "cva"
-  ],
-  "tailwindStylesheet": "./src/styles/globals.css"
+  "plugins": ["prettier-plugin-astro"],
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro"
+      }
+    }
+  ]
 }

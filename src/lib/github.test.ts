@@ -1,34 +1,142 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
-import type { GitHubRepository } from "@/types/github"
-import { applyRepositoryOverrides } from "@/lib/github"
+import { getGitHubPortfolio } from "@/lib/github"
+import type { Fetcher } from "@/lib/http"
+import type { Project } from "@/types/portfolio"
 
-const repository = (name: string): GitHubRepository => ({
-  id: name,
-  name,
-  description: name,
-  primaryLanguage: null,
-  topics: [],
-  stars: 0,
-  forks: 0,
-  url: `https://github.com/akashjana18/${name}`,
-  homepageUrl: null,
-  openGraphImageUrl: `https://example.com/${name}.png`,
-})
+const fallbackProjects: Project[] = [
+  {
+    id: "fallback",
+    name: "fallback",
+    displayName: "Fallback",
+    description: "Saved project",
+    primaryLanguage: "Rust",
+    topics: [],
+    stars: 0,
+    forks: 0,
+    url: "https://github.com/example/fallback",
+    homepageUrl: null,
+  },
+]
 
-describe("repository overrides", () => {
-  it("orders and hides repositories without duplicating metadata", () => {
-    const repositories = [
-      repository("glyphix"),
-      repository("perplab"),
-      repository("hidden"),
-    ]
+describe("getGitHubPortfolio", () => {
+  it("returns a deterministic fallback without requesting GitHub when the token is missing", async () => {
+    const fetcher = vi.fn<Fetcher>()
 
-    expect(
-      applyRepositoryOverrides(repositories, {
-        order: ["perplab", "glyphix"],
-        hidden: ["hidden"],
-      }).map((item) => item.name)
-    ).toEqual(["perplab", "glyphix"])
+    const result = await getGitHubPortfolio({
+      username: "example",
+      fallbackProjects,
+      fetcher,
+      now: new Date("2026-08-07T00:00:00Z"),
+    })
+
+    expect(fetcher).not.toHaveBeenCalled()
+    expect(result.source).toBe("fallback")
+    expect(result.projects).toEqual(fallbackProjects)
+    expect(result.calendar.weeks).toHaveLength(35)
+    expect(result.calendar.weeks.every((week) => week.length === 7)).toBe(true)
+  })
+
+  it("normalizes valid repositories, contributions, and merged pull requests", async () => {
+    const fetcher: Fetcher = async () =>
+      Response.json({
+        data: {
+          user: {
+            pinnedItems: {
+              nodes: [
+                {
+                  id: "repo-1",
+                  name: "edgerunner",
+                  description: "Fast execution paths",
+                  primaryLanguage: { name: "Rust" },
+                  repositoryTopics: {
+                    nodes: [{ topic: { name: "trading" } }],
+                  },
+                  stargazerCount: 4,
+                  forkCount: 1,
+                  url: "https://github.com/example/edgerunner",
+                  homepageUrl: null,
+                  updatedAt: "2026-08-01T00:00:00Z",
+                },
+              ],
+            },
+            contributionsCollection: {
+              contributionCalendar: {
+                totalContributions: 12,
+                weeks: [
+                  {
+                    contributionDays: [
+                      { contributionCount: 6, date: "2026-08-01" },
+                    ],
+                  },
+                ],
+              },
+            },
+            pullRequests: {
+              nodes: [
+                {
+                  id: "pr-1",
+                  title: "Tighten parser",
+                  url: "https://github.com/example/project/pull/1",
+                  number: 1,
+                  mergedAt: "2026-08-02T00:00:00Z",
+                  repository: { nameWithOwner: "example/project" },
+                },
+              ],
+            },
+          },
+        },
+      })
+
+    const result = await getGitHubPortfolio({
+      username: "example",
+      token: "token",
+      fallbackProjects,
+      fetcher,
+    })
+
+    expect(result.source).toBe("live")
+    expect(result.projects[0]).toMatchObject({
+      displayName: "EdgeRunner",
+      primaryLanguage: "Rust",
+      stars: 4,
+    })
+    expect(result.calendar.totalContributions).toBe(6)
+    expect(result.calendar.weeks[0]?.[0]?.level).toBe(3)
+    expect(result.pullRequests[0]?.repositoryName).toBe("example/project")
+  })
+
+  it.each([429, 500])(
+    "falls back when GitHub responds with %s",
+    async (status) => {
+      const result = await getGitHubPortfolio({
+        username: "example",
+        token: "token",
+        fallbackProjects,
+        fetcher: async () => new Response("unavailable", { status }),
+      })
+
+      expect(result.source).toBe("fallback")
+      expect(result.projects[0]?.displayName).toBe("Fallback")
+    }
+  )
+
+  it("falls back when the request times out", async () => {
+    const fetcher: Fetcher = (_input, init) =>
+      new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () =>
+          reject(new DOMException("Aborted", "AbortError"))
+        )
+      })
+
+    const result = await getGitHubPortfolio({
+      username: "example",
+      token: "token",
+      fallbackProjects,
+      fetcher,
+      timeoutMs: 5,
+    })
+
+    expect(result.source).toBe("fallback")
   })
 })

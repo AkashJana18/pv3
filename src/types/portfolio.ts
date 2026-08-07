@@ -1,14 +1,78 @@
-import type { GitHubRepository } from "@/types/github"
-import type { Article } from "@/types/writing"
+export type ContributionLevel = 0 | 1 | 2 | 3 | 4
+
+export type ContributionDay = {
+  date: string
+  count: number
+  level: ContributionLevel
+}
+
+export type ContributionCalendar = {
+  totalContributions: number
+  weeks: ContributionDay[][]
+}
+
+export type PullRequest = {
+  id: string
+  title: string
+  url: string
+  number: number
+  mergedAt: string
+  repositoryName: string
+}
+
+export type Project = {
+  id: string
+  name: string
+  displayName: string
+  description: string
+  primaryLanguage: string | null
+  topics: string[]
+  stars: number
+  forks: number
+  url: string
+  homepageUrl: string | null
+  updatedAt?: string
+}
+
+export type GitHubPortfolio = {
+  projects: Project[]
+  calendar: ContributionCalendar
+  pullRequests: PullRequest[]
+  source: "live" | "fallback"
+}
+
+export type ArticlePlatform = "DEV.to" | "Medium"
+
+export type ArticleLink = {
+  id: string
+  title: string
+  description: string
+  publishedAt: string
+  platform: ArticlePlatform
+  url: string
+}
+
+export type WritingResult = {
+  articles: ArticleLink[]
+  source: "live" | "fallback"
+}
 
 export type SocialLink = {
   label: string
   href: string
-  handle?: string
+  handle?: string | undefined
   sameAs?: boolean
 }
 
-export type PortfolioConfig = {
+export type Experience = {
+  organization: string
+  organizationUrl?: string
+  role: string
+  period: string
+  description: string
+}
+
+export type SiteConfig = {
   site: {
     name: string
     title: string
@@ -20,37 +84,17 @@ export type PortfolioConfig = {
     name: string
     givenName: string
     familyName: string
-    username: string
     role: string
     summary: string
     location: string
-    avatarUrl: string
-    resumeUrl?: string
+    timeZone: string
+    githubUsername: string
+    portraitUrl: string
+    resumeUrl?: string | undefined
   }
-  about: string[]
-  currentFocus: string[]
-  experience: {
-    organization: string
-    organizationUrl?: string
-    role: string
-    period: string
-    employmentType: string
-    description: string
-    highlights?: string[]
-  }[]
+  summary: string[]
+  experience: Experience[]
   socialLinks: SocialLink[]
-  github: {
-    username: string
-    token?: string
-    fallbackProjects: GitHubRepository[]
-  }
-  writing: {
-    devToApiKey?: string
-    devToUsername?: string
-    mediumRssUrl?: string
-    fallbackArticles: Article[]
-  }
-  external: {
-    revalidateSeconds: number
-  }
+  fallbackProjects: Project[]
+  fallbackArticles: ArticleLink[]
 }

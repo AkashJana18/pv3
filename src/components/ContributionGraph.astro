@@ -1,0 +1,77 @@
+---
+import type { ContributionCalendar } from "@/types/portfolio"
+
+type Props = {
+  calendar: ContributionCalendar
+  source: "live" | "fallback"
+  profileUrl: string
+}
+
+const { calendar, source, profileUrl } = Astro.props
+const monthFormatter = new Intl.DateTimeFormat("en", { month: "short" })
+const monthLabels = calendar.weeks.flatMap((week, index, weeks) => {
+  const day = week.find(Boolean)
+  if (!day) return []
+
+  const month = new Date(`${day.date}T00:00:00Z`).getUTCMonth()
+  const previousDay = weeks[index - 1]?.find(Boolean)
+  const previousMonth = previousDay
+    ? new Date(`${previousDay.date}T00:00:00Z`).getUTCMonth()
+    : -1
+
+  if (index !== 0 && month === previousMonth) return []
+
+  return [
+    { index, label: monthFormatter.format(new Date(`${day.date}T00:00:00Z`)) },
+  ]
+})
+const description =
+  source === "live"
+    ? `${calendar.totalContributions.toLocaleString("en-IN")} GitHub contributions in the last eight months.`
+    : "GitHub activity is temporarily unavailable."
+---
+
+<div
+  class="contribution-figure"
+  role="img"
+  aria-label={description}
+  style={`--graph-week-count: ${calendar.weeks.length}`}
+>
+  <div class="month-row" aria-hidden="true">
+    {
+      monthLabels.map((month) => (
+        <span style={`grid-column: ${month.index + 1} / span 4`}>
+          {month.label}
+        </span>
+      ))
+    }
+  </div>
+  <div class="graph-weeks" aria-hidden="true">
+    {
+      calendar.weeks.map((week) => (
+        <div class="graph-week">
+          {week.map((day) => (
+            <span
+              class="graph-day"
+              data-level={day.level}
+              title={`${day.count} contributions on ${day.date}`}
+            />
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<div class="activity-caption">
+  <span
+    >{
+      source === "live"
+        ? `${calendar.totalContributions.toLocaleString("en-IN")} contributions`
+        : "Live activity unavailable"
+    }</span
+  >
+  <a href={profileUrl} target="_blank" rel="noopener noreferrer">
+    View GitHub <span aria-hidden="true">↗</span>
+  </a>
+</div>
