@@ -22,7 +22,6 @@ const structuredData = getStructuredData({
   articles: writings.articles,
 })
 const githubUrl = `https://github.com/${siteConfig.person.githubUsername}`
-const hiddenPullRequestRepository = `${siteConfig.person.githubUsername}/herdr-scratch`
 const articleDate = new Intl.DateTimeFormat("en-GB", {
   day: "2-digit",
   month: "2-digit",
@@ -135,13 +134,7 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
             <div class="subsection">
               <ul class="compact-list">
                 {github.pullRequests.map((pullRequest) => (
-                  <li
-                    class={
-                      pullRequest.repositoryName === hiddenPullRequestRepository
-                        ? "compact-list-item--title-only"
-                        : undefined
-                    }
-                  >
+                  <li>
                     <a
                       href={pullRequest.url}
                       target="_blank"
@@ -153,7 +146,7 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
                       </span>
                       <span aria-hidden="true">↗</span>
                     </a>
-                                     </li>
+                  </li>
                 ))}
               </ul>
             </div>

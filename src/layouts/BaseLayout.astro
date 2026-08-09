@@ -1,6 +1,7 @@
 ---
 import "@/styles/global.css"
 
+import ThemeToggle from "@/components/ThemeToggle.astro"
 import { siteConfig } from "@/config/site"
 import { serializeStructuredData } from "@/lib/structured-data"
 
@@ -27,7 +28,32 @@ const socialImage = new URL(siteConfig.person.portraitUrl, siteConfig.site.url)
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      ;(() => {
+        const storageKey = "portfolio-theme"
+        let savedTheme = null
+
+        try {
+          savedTheme = window.localStorage.getItem(storageKey)
+        } catch {
+          // Fall back to the operating-system preference.
+        }
+
+        const theme =
+          savedTheme === "dark" || savedTheme === "light"
+            ? savedTheme
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+
+        document.documentElement.dataset.theme = theme
+        document.documentElement.style.colorScheme = theme
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute("content", theme === "dark" ? "#0d1117" : "#ffffff")
+      })()
+    </script>
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
@@ -62,6 +88,7 @@ const socialImage = new URL(siteConfig.person.portraitUrl, siteConfig.site.url)
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
+    <ThemeToggle />
     <slot />
   </body>
 </html>

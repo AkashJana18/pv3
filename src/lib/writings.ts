@@ -41,7 +41,7 @@ export async function getLatestWritings({
     fetchMediumArticles({ url: mediumRssUrl, fetcher, timeoutMs }),
   ])
 
-  const articles = normalizeAndSortArticles([...devTo, ...medium]).slice(0, 6)
+  const articles = normalizeAndSortArticles([...devTo, ...medium]).slice(0, 12)
 
   return articles.length
     ? { articles, source: "live" }
@@ -66,7 +66,7 @@ async function fetchDevToArticles({
   try {
     const url = new URL("https://dev.to/api/articles")
     url.searchParams.set("username", username)
-    url.searchParams.set("per_page", "8")
+    url.searchParams.set("per_page", "12")
 
     const requestInit: RequestInit = apiKey
       ? { headers: { "api-key": apiKey } }
