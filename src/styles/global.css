@@ -11,9 +11,27 @@
   --green-2: #79d895;
   --green-3: #32b862;
   --green-4: #167d3d;
+  --link-hover: #0f172a;
   --page-gutter: clamp(2.5rem, 8vw, 9rem);
   --section-gap: clamp(3.5rem, 7vw, 7rem);
   color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --background: #0d1117;
+  --foreground: #e7ebf1;
+  --muted-foreground: #abb5c3;
+  --quiet-foreground: #9ba7b7;
+  --border: #2b3441;
+  --soft-background: #151c26;
+  --focus: #93c5fd;
+  --green-0: #17231b;
+  --green-1: #1d4d2b;
+  --green-2: #247a3f;
+  --green-3: #31ab5e;
+  --green-4: #67d98b;
+  --link-hover: #ffffff;
+  color-scheme: dark;
 }
 
 *,
@@ -53,7 +71,7 @@ a {
 }
 
 a:hover {
-  color: #0f172a;
+  color: var(--link-hover);
   text-decoration-color: currentColor;
 }
 
@@ -82,6 +100,49 @@ a:focus-visible {
 
 .skip-link:focus {
   transform: translateY(0);
+}
+
+.theme-toggle {
+  position: fixed;
+  z-index: 5;
+  top: clamp(1rem, 3vw, 2rem);
+  right: var(--page-gutter);
+  display: inline-grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: var(--soft-background);
+  color: var(--foreground);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.theme-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.theme-icon--sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon--moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon--sun {
+  display: block;
 }
 
 .portfolio-shell {
@@ -352,7 +413,7 @@ a:focus-visible {
 }
 
 .subsection {
-  margin-top: 2.5rem;
+  margin-top: 0.75rem;
 }
 
 .compact-list {
@@ -361,47 +422,33 @@ a:focus-visible {
 }
 
 .compact-list li {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  align-items: baseline;
-  gap: 0.75rem;
+  width: 100%;
 }
 
 .compact-list a {
-  grid-column: 1;
-  font-size: 0.9rem;
+  display: block;
+  width: 100%;
+  font-size: 1rem;
   line-height: 1.45;
-}
-
-.compact-list .compact-list-item--title-only a {
-  grid-column: 1 / -1;
-}
-
-.compact-list li > span {
-  grid-column: 2;
-  grid-row: 1;
-  overflow-wrap: anywhere;
-  color: var(--quiet-foreground);
-  font-size: 0.72rem;
-  line-height: 1.45;
-  text-align: right;
 }
 
 .writing-list {
-  display: grid;
-  gap: 1rem;
+  columns: 1;
+  column-gap: clamp(2.5rem, 7vw, 7.5rem);
 }
 
 .writing-list li {
   display: grid;
-  grid-template-columns: 4.25rem minmax(0, 1fr);
+  grid-template-columns: 5rem minmax(0, 1fr);
   gap: 0 0.65rem;
   align-items: baseline;
+  break-inside: avoid;
+  margin-bottom: 1rem;
 }
 
 .writing-list time {
   color: var(--quiet-foreground);
-  font-size: 0.72rem;
+  font-size: 1rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -505,8 +552,12 @@ a:focus-visible {
     grid-template-areas:
       "profile profile"
       "projects activity"
-      "writings activity";
+      "writings writings";
     align-items: start;
+  }
+
+  .writing-list {
+    columns: 2;
   }
 
   .profile-composition {
@@ -544,6 +595,11 @@ a:focus-visible {
 }
 
 @media (max-width: 35rem) {
+  .theme-toggle {
+    top: 1rem;
+    right: 1rem;
+  }
+
   .portfolio-shell {
     padding-top: 2.5rem;
   }
@@ -562,6 +618,7 @@ a:focus-visible {
 
 @media print {
   .skip-link,
+  .theme-toggle,
   .activity-caption,
   script {
     display: none;

@@ -82,6 +82,14 @@ describe("getGitHubPortfolio", () => {
                   mergedAt: "2026-08-02T00:00:00Z",
                   repository: { nameWithOwner: "example/project" },
                 },
+                {
+                  id: "pr-2",
+                  title: "Improve fallback behavior",
+                  url: "https://github.com/example/project/pull/2",
+                  number: 2,
+                  mergedAt: "2026-08-01T00:00:00Z",
+                  repository: { nameWithOwner: "example/project" },
+                },
               ],
             },
           },
@@ -103,6 +111,7 @@ describe("getGitHubPortfolio", () => {
     })
     expect(result.calendar.totalContributions).toBe(6)
     expect(result.calendar.weeks[0]?.[0]?.level).toBe(3)
+    expect(result.pullRequests).toHaveLength(result.projects.length)
     expect(result.pullRequests[0]?.repositoryName).toBe("example/project")
   })
 

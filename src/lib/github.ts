@@ -190,6 +190,7 @@ export async function getGitHubPortfolio({
       .map(normalizeProject)
       .filter((project): project is Project => Boolean(project))
       .sort(sortProjects)
+    const visibleProjects = projects.length ? projects : fallback.projects
 
     const calendar = user.contributionsCollection.contributionCalendar
     const visibleWeeks = calendar.weeks
@@ -210,10 +211,10 @@ export async function getGitHubPortfolio({
         (left, right) =>
           new Date(right.mergedAt).getTime() - new Date(left.mergedAt).getTime()
       )
-      .slice(0, 4)
+      .slice(0, visibleProjects.length)
 
     return {
-      projects: projects.length ? projects : fallback.projects,
+      projects: visibleProjects,
       calendar: {
         totalContributions: visibleWeeks.reduce(
           (total, week) =>

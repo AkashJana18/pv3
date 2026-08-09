@@ -40,7 +40,7 @@ const description =
   <div class="month-row" aria-hidden="true">
     {
       monthLabels.map((month) => (
-        <span style={`grid-column: ${month.index + 1} / span 4`}>
+        <span style={`grid-column: ${month.index + 1}; grid-row: 1`}>
           {month.label}
         </span>
       ))

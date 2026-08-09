@@ -93,6 +93,32 @@ describe("getLatestWritings", () => {
 
     expect(result).toEqual({ articles: fallbackArticles, source: "fallback" })
   })
+
+  it("returns up to twelve recent articles for the two-column layout", async () => {
+    const fetcher: Fetcher = async (input) => {
+      if (String(input).includes("dev.to")) {
+        return Response.json(
+          Array.from({ length: 14 }, (_, index) => ({
+            id: index,
+            title: `Article ${index}`,
+            description: "A useful description",
+            published_at: new Date(Date.UTC(2026, 7, 14 - index)).toISOString(),
+            url: `https://dev.to/example/article-${index}`,
+          }))
+        )
+      }
+
+      return new Response("", { status: 404 })
+    }
+
+    const result = await getLatestWritings({
+      devToUsername: "example",
+      fallbackArticles: [],
+      fetcher,
+    })
+
+    expect(result.articles).toHaveLength(12)
+  })
 })
 
 describe("normalizeAndSortArticles", () => {
