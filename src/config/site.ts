@@ -29,7 +29,7 @@ const optionalSocialLinks: SocialLink[] = [
   },
 ].filter((link) => Boolean(link.href))
 
-export const siteConfig = {
+export const siteConfig: SiteConfig = {
   site: {
     name: "Akash Jana",
     title: "Akash Jana — Full-Stack Developer",
@@ -44,7 +44,7 @@ export const siteConfig = {
     familyName: "Jana",
     role: "Full-Stack Developer · Rust & Solana",
     summary:
-      "I build practical, reliable products end to end—from interfaces and APIs to systems tooling. Rust and Solana are part of my toolkit, not the boundary of what I work on.",
+      "Hi, I’m Akash—a full-stack developer building web products, developer tools, and trading infrastructure. I work across TypeScript and modern web stacks, with deeper systems experience in Rust and hands-on work in the Solana ecosystem.",
     location: "India",
     timeZone: "Asia/Kolkata",
     githubUsername: env.githubUsername,
@@ -52,42 +52,57 @@ export const siteConfig = {
     resumeUrl: env.resumeUrl,
   },
   summary: [
-    "Full-stack developer working across frontend, backend, infrastructure, and developer tooling.",
-    "I work comfortably with TypeScript and modern web stacks, with deeper systems work in Rust and hands-on experience in the Solana ecosystem.",
-    "I care about useful open-source software, precise technical writing, and products that stay simple under pressure.",
-  ],
-  experience: [
-    {
-      organization: "Independent",
-      role: "Full-Stack Developer",
-      period: "Current",
-      description:
-        "Building web products, trading infrastructure, and developer tools, using Rust and Solana where they are the right fit.",
-    },
-    {
-      organization: "Superteam",
-      organizationUrl: "https://superteam.fun/",
-      role: "Solana Fellow",
-      period: "Community",
-      description:
-        "Building and learning with the global Solana community through a focused fellowship.",
-    },
-    {
-      organization: "Protocol Labs Dev Guild",
-      organizationUrl: "https://protocol.ai/",
-      role: "Open-source Contributor",
-      period: "Community",
-      description:
-        "Contributing to open developer tooling and community-led technical work.",
-    },
-    {
-      organization: "Storacha",
-      organizationUrl: "https://storacha.network/",
-      role: "Community Manager",
-      period: "Former",
-      description:
-        "Supported developer and community operations for decentralized storage.",
-    },
+    [
+      { text: "I’ve earned " },
+      {
+        text: "$7.2k+ through open-source work and technical bounties",
+        emphasis: true,
+      },
+      { text: "." },
+    ],
+    [
+      {
+        text: "Currently building independently across web, trading infrastructure, and developer tooling.",
+      },
+    ],
+    [
+      { text: "Solana Fellow at " },
+      {
+        text: "Superteam",
+        href: "https://superteam.fun/",
+        emphasis: true,
+      },
+      {
+        text: ", building and learning with the global Solana community.",
+      },
+    ],
+    [
+      { text: "Open-source contributor with " },
+      {
+        text: "Protocol Labs Dev Guild",
+        href: "https://protocol.ai/",
+        emphasis: true,
+      },
+      {
+        text: ", working on developer tooling and community-led technical projects.",
+      },
+    ],
+    [
+      {
+        text: "Previously supported developer and community operations at ",
+      },
+      {
+        text: "Storacha",
+        href: "https://storacha.network/",
+        emphasis: true,
+      },
+      { text: "." },
+    ],
+    [
+      {
+        text: "I care about useful software, precise technical writing, and products that stay simple under pressure.",
+      },
+    ],
   ],
   socialLinks: [
     {
@@ -152,4 +167,4 @@ export const siteConfig = {
     },
   ],
   fallbackArticles: [],
-} satisfies SiteConfig
+}

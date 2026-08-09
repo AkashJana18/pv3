@@ -64,13 +64,13 @@ export type SocialLink = {
   sameAs?: boolean
 }
 
-export type Experience = {
-  organization: string
-  organizationUrl?: string
-  role: string
-  period: string
-  description: string
+export type SummaryPart = {
+  text: string
+  emphasis?: boolean
+  href?: string
 }
+
+export type SummaryLine = SummaryPart[]
 
 export type SiteConfig = {
   site: {
@@ -92,8 +92,7 @@ export type SiteConfig = {
     portraitUrl: string
     resumeUrl?: string | undefined
   }
-  summary: string[]
-  experience: Experience[]
+  summary: SummaryLine[]
   socialLinks: SocialLink[]
   fallbackProjects: Project[]
   fallbackArticles: ArticleLink[]

@@ -32,68 +32,97 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
 <BaseLayout structuredData={structuredData}>
   <main id="content" class="portfolio-shell">
     <div class="portfolio-grid">
-      <header class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">Portfolio / 2026</p>
-        <h1 id="page-title">{siteConfig.person.name}</h1>
-        <p class="role">{siteConfig.person.role}</p>
-        <p class="status-line">
-          <time
-            id="india-clock"
-            data-time-zone={siteConfig.person.timeZone}
-            datetime={new Date().toISOString()}
+      <div class="profile-composition">
+        <header class="intro" aria-labelledby="page-title">
+          <h1 id="page-title">{siteConfig.person.name}</h1>
+          <p class="role">{siteConfig.person.role}</p>
+          <p class="status-line">
+            <time
+              id="india-clock"
+              data-time-zone={siteConfig.person.timeZone}
+              datetime={new Date().toISOString()}
+            >
+              {
+                new Intl.DateTimeFormat("en-IN", {
+                  timeZone: siteConfig.person.timeZone,
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                }).format(new Date())
+              }
+            </time>
+            <span aria-hidden="true">·</span>
+            <span>{siteConfig.person.location}</span>
+          </p>
+        </header>
+
+        <figure class="portrait">
+          <Picture
+            src={portraitImage}
+            alt={`Akash Jana outdoors in front of green foliage`}
+            width={720}
+            height={900}
+            widths={[320, 480, 640, 720]}
+            sizes="(min-width: 900px) 24rem, 100vw"
+            layout="constrained"
+            fit="cover"
+            position="54% 50%"
+            formats={["avif", "webp"]}
+            fallbackFormat="webp"
+            quality="mid"
+            priority
+            onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
+          />
+        </figure>
+
+        <div class="profile-notes">
+          <section
+            class="summary section-block"
+            aria-labelledby="summary-title"
           >
-            {
-              new Intl.DateTimeFormat("en-IN", {
-                timeZone: siteConfig.person.timeZone,
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              }).format(new Date())
-            }
-          </time>
-          <span aria-hidden="true">·</span>
-          <span>{siteConfig.person.location}</span>
-        </p>
-        <p class="lede">{siteConfig.person.summary}</p>
-      </header>
+            <h2 id="summary-title">Summary</h2>
+            <div class="prose-stack">
+              {
+                siteConfig.summary.map((line) => (
+                  <p>
+                    {line.map((part) => {
+                      if ("href" in part && part.href) {
+                        return (
+                          <a
+                            href={part.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {part.emphasis ? (
+                              <strong>{part.text}</strong>
+                            ) : (
+                              part.text
+                            )}
+                            <span aria-hidden="true"> ↗</span>
+                          </a>
+                        )
+                      }
 
-      <figure class="portrait">
-        <Picture
-          src={portraitImage}
-          alt={`Akash Jana outdoors in front of green foliage`}
-          width={900}
-          height={1125}
-          widths={[360, 540, 720, 900]}
-          sizes="(min-width: 900px) 38vw, 100vw"
-          layout="constrained"
-          fit="cover"
-          position="54% 50%"
-          formats={["avif", "webp"]}
-          fallbackFormat="webp"
-          quality="mid"
-          priority
-          onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
-        />
-      </figure>
-
-      <section class="summary section-block" aria-labelledby="summary-title">
-        <h2 id="summary-title">Summary</h2>
-        <div class="prose-stack">
-          {siteConfig.summary.map((paragraph) => <p>{paragraph}</p>)}
+                      return part.emphasis ? (
+                        <strong>{part.text}</strong>
+                      ) : (
+                        part.text
+                      )
+                    })}
+                  </p>
+                ))
+              }
+            </div>
+            <p class="availability">
+              Open to full-stack engineering opportunities, including Rust and
+              Solana-focused work.
+            </p>
+          </section>
         </div>
-        <p class="availability">
-          Available for full-stack engineering roles, including Rust and
-          Solana-focused work.
-        </p>
-      </section>
+      </div>
 
       <section class="activity section-block" aria-labelledby="activity-title">
-        <div class="section-heading-row">
-          <h2 id="activity-title">GitHub activity</h2>
-          <span class="source-label">
-            {github.source === "live" ? "Updated live" : "Saved snapshot"}
-          </span>
-        </div>
+        <h2 id="activity-title">GitHub activity</h2>
         <ContributionGraph
           calendar={github.calendar}
           source={github.source}
@@ -103,7 +132,6 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
         {
           github.pullRequests.length > 0 && (
             <div class="subsection">
-              <h3>Recent merged work</h3>
               <ul class="compact-list">
                 {github.pullRequests.map((pullRequest) => (
                   <li>
@@ -195,39 +223,6 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
             </p>
           )
         }
-      </section>
-
-      <section
-        class="experience section-block"
-        aria-labelledby="experience-title"
-      >
-        <h2 id="experience-title">Experience</h2>
-        <ol class="experience-list">
-          {
-            siteConfig.experience.map((item) => (
-              <li>
-                <div class="experience-heading">
-                  <h3>
-                    {item.organizationUrl ? (
-                      <a
-                        href={item.organizationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {item.organization} <span aria-hidden="true">↗</span>
-                      </a>
-                    ) : (
-                      item.organization
-                    )}
-                  </h3>
-                  <span>{item.period}</span>
-                </div>
-                <p class="experience-role">{item.role}</p>
-                <p>{item.description}</p>
-              </li>
-            ))
-          }
-        </ol>
       </section>
     </div>
 
