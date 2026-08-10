@@ -3,6 +3,11 @@ function read(value: string | undefined) {
   return normalized || undefined
 }
 
+function readNumber(value: string | undefined, fallback: number) {
+  const parsed = Number(read(value))
+  return Number.isFinite(parsed) ? parsed : fallback
+}
+
 export const env = {
   siteUrl: read(import.meta.env.SITE_URL) ?? "https://akashjana.tech",
   githubToken: read(import.meta.env.GITHUB_TOKEN),
@@ -16,4 +21,6 @@ export const env = {
   devToUrl: read(import.meta.env.PROFILE_DEVTO_URL),
   mediumUrl: read(import.meta.env.PROFILE_MEDIUM_URL),
   resumeUrl: read(import.meta.env.RESUME_URL),
+  weatherLatitude: readNumber(import.meta.env.WEATHER_LATITUDE, 19.076),
+  weatherLongitude: readNumber(import.meta.env.WEATHER_LONGITUDE, 72.8777),
 } as const

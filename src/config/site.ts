@@ -10,21 +10,25 @@ const optionalSocialLinks: SocialLink[] = [
   {
     label: "LinkedIn",
     href: env.linkedInUrl ?? "",
+    handle: "@akashjana",
     sameAs: true,
   },
   {
     label: "X",
     href: env.xUrl ?? "",
+    handle: "@akashjana__",
     sameAs: true,
   },
   {
     label: "DEV.to",
     href: env.devToUrl ?? "",
+    handle: "@akashjana",
     sameAs: true,
   },
   {
     label: "Medium",
     href: env.mediumUrl ?? "",
+    handle: "@akashjana663",
     sameAs: true,
   },
 ].filter((link) => Boolean(link.href))
@@ -42,11 +46,15 @@ export const siteConfig: SiteConfig = {
     name: "Akash Jana",
     givenName: "Akash",
     familyName: "Jana",
-    role: "Full-Stack Developer · Rust & Solana",
+    role: "Full-Stack Engineer, Rust, TypeScript",
     summary:
       "Hi, I’m Akash—a full-stack developer building web products, developer tools, and trading infrastructure. I work across TypeScript and modern web stacks, with deeper systems experience in Rust and hands-on work in the Solana ecosystem.",
-    location: "India",
+    location: "Mumbai, IN",
     timeZone: "Asia/Kolkata",
+    weather: {
+      latitude: env.weatherLatitude,
+      longitude: env.weatherLongitude,
+    },
     githubUsername: env.githubUsername,
     portraitUrl: "/formal-me.jpg",
     resumeUrl: env.resumeUrl,

@@ -88,6 +88,10 @@ export type SiteConfig = {
     summary: string
     location: string
     timeZone: string
+    weather: {
+      latitude: number
+      longitude: number
+    }
     githubUsername: string
     portraitUrl: string
     resumeUrl?: string | undefined

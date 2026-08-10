@@ -3,6 +3,7 @@ import { Picture } from "astro:assets"
 
 import portraitImage from "@/assets/formal-me.jpg"
 import ContributionGraph from "@/components/ContributionGraph.astro"
+import SocialIcon from "@/components/SocialIcon.astro"
 import { siteConfig } from "@/config/site"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import { loadPortfolioData } from "@/lib/data"
@@ -27,6 +28,16 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
   month: "2-digit",
   year: "2-digit",
 })
+const statusTime = new Intl.DateTimeFormat("en-IN", {
+  timeZone: siteConfig.person.timeZone,
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+})
+const formatStatusTime = (date: Date) =>
+  statusTime
+    .format(date)
+    .replace(/\b(am|pm)\b/gi, (period) => period.toUpperCase())
 ---
 
 <BaseLayout structuredData={structuredData}>
@@ -34,7 +45,7 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
     <div class="portfolio-grid">
       <div class="profile-composition">
         <header class="intro" aria-labelledby="page-title">
-          <h1 id="page-title">{siteConfig.person.name}</h1>
+          <h1 id="page-title">{siteConfig.person.givenName}</h1>
           <p class="role">{siteConfig.person.role}</p>
           <p class="status-line">
             <time
@@ -42,17 +53,22 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
               data-time-zone={siteConfig.person.timeZone}
               datetime={new Date().toISOString()}
             >
-              {
-                new Intl.DateTimeFormat("en-IN", {
-                  timeZone: siteConfig.person.timeZone,
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true,
-                }).format(new Date())
-              }
+              {formatStatusTime(new Date())}
             </time>
-            <span aria-hidden="true">·</span>
-            <span>{siteConfig.person.location}</span>
+            <span>{`, ${siteConfig.person.location}`}</span>
+            <span
+              id="weather-status"
+              class="weather-status"
+              data-latitude={siteConfig.person.weather.latitude}
+              data-longitude={siteConfig.person.weather.longitude}
+              aria-label="Weather loading; data by Open-Meteo"
+              title="Weather data by Open-Meteo"
+              aria-live="polite"
+            >
+              <span aria-hidden="true">,</span>
+              <span class="weather-copy">--°C</span>
+              <span class="weather-icon" aria-hidden="true">🌤️</span>
+            </span>
           </p>
         </header>
 
@@ -226,7 +242,8 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
 
     <footer class="site-footer">
       <nav aria-label="Connect">
-        <ul>
+        <h2 class="footer-heading">Connect</h2>
+        <ul class="footer-links">
           {
             siteConfig.socialLinks.map((link) => (
               <li>
@@ -239,7 +256,14 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
                       : undefined
                   }
                 >
-                  {link.label} <span aria-hidden="true">↗</span>
+                  <SocialIcon name={link.label} />
+                  <span class="footer-label">{link.label}</span>
+                  <span class="footer-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                  {link.handle && (
+                    <span class="footer-handle">({link.handle})</span>
+                  )}
                 </a>
               </li>
             ))
@@ -252,7 +276,11 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Résumé <span aria-hidden="true">↗</span>
+                  <SocialIcon name="Résumé" />
+                  <span class="footer-label">Résumé</span>
+                  <span class="footer-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               </li>
             )
@@ -268,23 +296,97 @@ const articleDate = new Intl.DateTimeFormat("en-GB", {
   <script is:inline>
     ;(() => {
       const clock = document.querySelector("#india-clock")
-      if (!(clock instanceof HTMLTimeElement)) return
+      if (clock instanceof HTMLTimeElement) {
+        const formatter = new Intl.DateTimeFormat("en-IN", {
+          timeZone: clock.dataset.timeZone || "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
 
-      const formatter = new Intl.DateTimeFormat("en-IN", {
-        timeZone: clock.dataset.timeZone || "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })
+        const update = () => {
+          const now = new Date()
+          clock.textContent = formatter
+            .format(now)
+            .replace(/\b(am|pm)\b/gi, (period) => period.toUpperCase())
+          clock.dateTime = now.toISOString()
+        }
 
-      const update = () => {
-        const now = new Date()
-        clock.textContent = formatter.format(now)
-        clock.dateTime = now.toISOString()
+        update()
+        window.setInterval(update, 60_000)
       }
 
-      update()
-      window.setInterval(update, 60_000)
+      const weather = document.querySelector("#weather-status")
+      if (!(weather instanceof HTMLElement)) return
+
+      const latitude = Number(weather.dataset.latitude)
+      const longitude = Number(weather.dataset.longitude)
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+
+      const getWeather = (code, isDay) => {
+        if (code === 0) return isDay ? ["☀️", "Clear"] : ["🌙", "Clear"]
+        if (code <= 2) return ["🌤️", "Partly cloudy"]
+        if (code === 3) return ["☁️", "Overcast"]
+        if (code === 45 || code === 48) return ["🌫️", "Fog"]
+        if (code >= 51 && code <= 57) return ["🌦️", "Drizzle"]
+        if (code >= 61 && code <= 67) return ["🌧️", "Rain"]
+        if (code >= 71 && code <= 77) return ["🌨️", "Snow"]
+        if (code >= 80 && code <= 82) return ["🌦️", "Showers"]
+        if (code >= 85 && code <= 86) return ["🌨️", "Snow showers"]
+        if (code >= 95 && code <= 99) return ["⛈️", "Thunderstorm"]
+        return ["🌤️", "Weather"]
+      }
+
+      const endpoint = new URL("https://api.open-meteo.com/v1/forecast")
+      endpoint.search = new URLSearchParams({
+        latitude: String(latitude),
+        longitude: String(longitude),
+        current: "temperature_2m,weather_code,is_day",
+        timezone: "auto",
+        forecast_days: "1",
+      }).toString()
+
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => controller.abort(), 5_000)
+
+      fetch(endpoint, { signal: controller.signal })
+        .then((response) => {
+          if (!response.ok) throw new Error("Weather request failed")
+          return response.json()
+        })
+        .then((payload) => {
+          const temperature = Number(payload?.current?.temperature_2m)
+          const code = Number(payload?.current?.weather_code)
+          const isDay = Number(payload?.current?.is_day) === 1
+
+          if (!Number.isFinite(temperature) || !Number.isFinite(code)) {
+            throw new Error("Weather response was incomplete")
+          }
+
+          const [emoji, condition] = getWeather(code, isDay)
+          const icon = document.createElement("span")
+          const copy = document.createElement("span")
+          icon.className = "weather-icon"
+          icon.ariaHidden = "true"
+          icon.textContent = emoji
+          copy.className = "weather-copy"
+          copy.textContent = `${Math.round(temperature)}°C, ${condition}`
+          const separator = document.createElement("span")
+          separator.ariaHidden = "true"
+          separator.textContent = ","
+          weather.replaceChildren(separator, copy, icon)
+          weather.ariaLabel = `${Math.round(temperature)} degrees Celsius, ${condition}; data by Open-Meteo`
+        })
+        .catch(() => {
+          const icon = weather.querySelector(".weather-icon")
+          const copy = weather.querySelector(".weather-copy")
+
+          if (icon instanceof HTMLElement) icon.textContent = "☁️"
+          if (copy instanceof HTMLElement)
+            copy.textContent = "Weather unavailable"
+          weather.ariaLabel = "Weather unavailable; data by Open-Meteo"
+        })
+        .finally(() => window.clearTimeout(timeout))
     })()
   </script>
 </BaseLayout>

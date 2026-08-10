@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Kalam";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/kalam-latin-300.woff2") format("woff2");
+}
+
 :root {
   --background: #ffffff;
   --foreground: #202633;
@@ -212,26 +220,39 @@ a:focus-visible {
 
 .intro h1 {
   margin: 0;
-  font-size: clamp(2.35rem, 5vw, 4.75rem);
-  font-weight: 650;
-  letter-spacing: -0.055em;
-  line-height: 0.98;
+  font-family: "Kalam", cursive;
+  font-size: clamp(3.25rem, 6vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
 }
 
 .role {
   margin: 0.85rem 0 0;
-  color: var(--muted-foreground);
+  color: var(--foreground);
   font-size: clamp(1rem, 1.6vw, 1.2rem);
 }
 
 .status-line {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
   margin: 0.35rem 0 0;
   color: var(--quiet-foreground);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-variant-numeric: tabular-nums;
+}
+
+.weather-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: inherit;
+}
+
+.weather-icon {
+  line-height: 1;
 }
 
 .portrait {
@@ -467,43 +488,66 @@ a:focus-visible {
 }
 
 .site-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  flex-wrap: wrap;
-  margin-top: clamp(5rem, 10vw, 10rem);
+  display: grid;
+  gap: 1.75rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
   border-top: 1px solid var(--border);
-  padding-top: 0.75rem;
+  padding-top: 1rem;
   color: var(--quiet-foreground);
-  font-size: 0.75rem;
+  font-size: 1rem;
+}
+
+.site-footer nav {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.footer-heading {
+  margin: 0;
+  color: var(--quiet-foreground);
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 .site-footer ul {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 0.75rem;
+  display: grid;
+  gap: 0.8rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.site-footer li {
-  display: inline-flex;
-  align-items: center;
-}
-
-.site-footer li:not(:last-child)::after {
-  content: "·";
-  margin-left: 0.75rem;
-  color: var(--border);
-}
-
 .site-footer a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.5rem;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.footer-label,
+.footer-arrow {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.footer-arrow {
+  margin-left: -0.2rem;
+}
+
+.footer-handle {
+  color: var(--muted-foreground);
+}
+
+.social-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
 }
 
 .copyright {
