@@ -15,6 +15,17 @@ const fallbackProjects: Project[] = [
     url: "https://github.com/example/fallback",
     homepageUrl: null,
   },
+  {
+    id: "macfolio",
+    name: "macfolio",
+    displayName: "Macfolio",
+    description: "A macOS-inspired portfolio built with GSAP.",
+    primaryLanguage: "JavaScript",
+    stars: 0,
+    url: "https://github.com/example/macfolio",
+    homepageUrl: "https://macfolio.example.com",
+    alwaysInclude: true,
+  },
 ]
 
 describe("getGitHubPortfolio", () => {
@@ -99,6 +110,7 @@ describe("getGitHubPortfolio", () => {
       primaryLanguage: "Rust",
       stars: 4,
     })
+    expect(result.projects.at(-1)?.displayName).toBe("Macfolio")
     expect(result.calendar.totalContributions).toBe(6)
     expect(result.calendar.weeks[0]?.[0]?.level).toBe(3)
     expect(result.pullRequests).toHaveLength(result.projects.length)

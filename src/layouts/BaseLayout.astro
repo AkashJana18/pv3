@@ -1,6 +1,8 @@
 ---
 import "@/styles/global.css"
 
+import Analytics from "@vercel/analytics/astro"
+
 import ThemeToggle from "@/components/ThemeToggle.astro"
 import { siteConfig } from "@/config/site"
 import { serializeStructuredData } from "@/lib/structured-data"
@@ -92,6 +94,7 @@ const socialImage = new URL(siteConfig.person.portraitUrl, siteConfig.site.url)
     }
 
     <title>{title}</title>
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>

@@ -112,6 +112,7 @@ const preferredProjectNames = new Map([
   ["edgerunner", "EdgeRunner"],
   ["perplab", "PerpLab"],
   ["glyphix", "Glyphix"],
+  ["macfolio", "Macfolio"],
 ])
 
 const preferredOrder = ["edgerunner", "perplab", "herdr-scratch", "glyphix"]
@@ -172,7 +173,9 @@ export async function getGitHubPortfolio({
       .map(normalizeProject)
       .filter((project): project is Project => Boolean(project))
       .sort(sortProjects)
-    const visibleProjects = projects.length ? projects : fallback.projects
+    const visibleProjects = projects.length
+      ? appendAlwaysIncludedProjects(projects, fallbackProjects)
+      : fallback.projects
 
     const calendar = user.contributionsCollection.contributionCalendar
     const visibleWeeks = calendar.weeks
@@ -261,6 +264,30 @@ function sortProjects(left: Project, right: Project) {
   return normalizedLeft - normalizedRight || left.name.localeCompare(right.name)
 }
 
+function appendAlwaysIncludedProjects(
+  projects: Project[],
+  fallbackProjects: Project[]
+) {
+  const alwaysIncluded = fallbackProjects.filter(
+    (project) => project.alwaysInclude
+  )
+  const alwaysIncludedNames = new Set(
+    alwaysIncluded.map((project) => project.name.toLowerCase())
+  )
+  const liveProjects = new Map(
+    projects.map((project) => [project.name.toLowerCase(), project])
+  )
+
+  return [
+    ...projects.filter(
+      (project) => !alwaysIncludedNames.has(project.name.toLowerCase())
+    ),
+    ...alwaysIncluded.map(
+      (project) => liveProjects.get(project.name.toLowerCase()) ?? project
+    ),
+  ]
+}
+
 export function getContributionLevel(count: number): ContributionLevel {
   if (count <= 0) return 0
   if (count <= 2) return 1
@@ -303,7 +330,10 @@ function createFallbackPortfolio(
   now: Date
 ): GitHubPortfolio {
   return {
-    projects: [...fallbackProjects].sort(sortProjects),
+    projects: appendAlwaysIncludedProjects(
+      [...fallbackProjects].sort(sortProjects),
+      fallbackProjects
+    ),
     calendar: createFallbackCalendar(now),
     pullRequests: [],
     source: "fallback",

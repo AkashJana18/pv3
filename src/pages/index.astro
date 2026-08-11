@@ -214,13 +214,36 @@ const formatStatusTime = (date: Date) =>
               {github.projects.map((project) => (
                 <li>
                   <div class="project-line">
-                    <a
-                      href={project.homepageUrl ?? project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {project.displayName} <span aria-hidden="true">↗</span>
-                    </a>
+                    <div class="project-links">
+                      <a
+                        class="project-title"
+                        href={project.homepageUrl ?? project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {project.displayName} <span aria-hidden="true">↗</span>
+                      </a>
+                      <a
+                        class="project-source-link"
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`View ${project.displayName} source code on GitHub`}
+                        title={`View ${project.displayName} source code on GitHub`}
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.75"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 6l-4 12" />
+                        </svg>
+                      </a>
+                    </div>
                     <span class="project-meta">
                       {project.primaryLanguage ?? "Open source"}
                       {project.stars > 0 && ` · ${project.stars}★`}

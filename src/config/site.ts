@@ -166,6 +166,17 @@ export const siteConfig: SiteConfig = {
       url: "https://github.com/AkashJana18/glyphix",
       homepageUrl: "https://youtu.be/Fd0-qCSlU10?si=rOt4YK5eRtzltAYl",
     },
+    {
+      id: "macfolio",
+      name: "macfolio",
+      displayName: "Macfolio",
+      description: "A macOS-inspired portfolio built with GSAP.",
+      primaryLanguage: "JavaScript",
+      stars: 0,
+      url: "https://github.com/AkashJana18/macfolio",
+      homepageUrl: "https://akash-macfolio.vercel.app/",
+      alwaysInclude: true,
+    },
   ],
   fallbackArticles: [],
 }

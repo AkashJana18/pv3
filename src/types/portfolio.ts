@@ -28,6 +28,7 @@ export type Project = {
   stars: number
   url: string
   homepageUrl: string | null
+  alwaysInclude?: boolean | undefined
 }
 
 export type GitHubPortfolio = {
