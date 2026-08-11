@@ -11,9 +11,7 @@ const fallbackProjects: Project[] = [
     displayName: "Fallback",
     description: "Saved project",
     primaryLanguage: "Rust",
-    topics: [],
     stars: 0,
-    forks: 0,
     url: "https://github.com/example/fallback",
     homepageUrl: null,
   },
@@ -49,20 +47,14 @@ describe("getGitHubPortfolio", () => {
                   name: "edgerunner",
                   description: "Fast execution paths",
                   primaryLanguage: { name: "Rust" },
-                  repositoryTopics: {
-                    nodes: [{ topic: { name: "trading" } }],
-                  },
                   stargazerCount: 4,
-                  forkCount: 1,
                   url: "https://github.com/example/edgerunner",
                   homepageUrl: null,
-                  updatedAt: "2026-08-01T00:00:00Z",
                 },
               ],
             },
             contributionsCollection: {
               contributionCalendar: {
-                totalContributions: 12,
                 weeks: [
                   {
                     contributionDays: [
@@ -78,7 +70,6 @@ describe("getGitHubPortfolio", () => {
                   id: "pr-1",
                   title: "Tighten parser",
                   url: "https://github.com/example/project/pull/1",
-                  number: 1,
                   mergedAt: "2026-08-02T00:00:00Z",
                   repository: { nameWithOwner: "example/project" },
                 },
@@ -86,7 +77,6 @@ describe("getGitHubPortfolio", () => {
                   id: "pr-2",
                   title: "Improve fallback behavior",
                   url: "https://github.com/example/project/pull/2",
-                  number: 2,
                   mergedAt: "2026-08-01T00:00:00Z",
                   repository: { nameWithOwner: "example/project" },
                 },

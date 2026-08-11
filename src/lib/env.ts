@@ -20,7 +20,6 @@ export const env = {
   xUrl: read(import.meta.env.PROFILE_X_URL),
   devToUrl: read(import.meta.env.PROFILE_DEVTO_URL),
   mediumUrl: read(import.meta.env.PROFILE_MEDIUM_URL),
-  resumeUrl: read(import.meta.env.RESUME_URL),
   weatherLatitude: readNumber(import.meta.env.WEATHER_LATITUDE, 19.076),
   weatherLongitude: readNumber(import.meta.env.WEATHER_LONGITUDE, 72.8777),
 } as const

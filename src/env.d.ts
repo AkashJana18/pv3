@@ -12,7 +12,6 @@ interface ImportMetaEnv {
   readonly PROFILE_X_URL?: string
   readonly PROFILE_DEVTO_URL?: string
   readonly PROFILE_MEDIUM_URL?: string
-  readonly RESUME_URL?: string
 }
 
 interface ImportMeta {

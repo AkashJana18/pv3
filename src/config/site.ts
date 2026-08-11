@@ -5,34 +5,29 @@ const optionalSocialLinks: SocialLink[] = [
   {
     label: "Email",
     href: env.contactEmail ? `mailto:${env.contactEmail}` : "",
-    handle: env.contactEmail,
     displayPath: env.contactEmail ? `email/${env.contactEmail}` : undefined,
   },
   {
     label: "LinkedIn",
     href: env.linkedInUrl ?? "",
-    handle: "@akashjana",
     displayPath: "linkedin/akashjana",
     sameAs: true,
   },
   {
     label: "X",
     href: env.xUrl ?? "",
-    handle: "@akashjana__",
     displayPath: "x/akashjana__",
     sameAs: true,
   },
   {
     label: "DEV.to",
     href: env.devToUrl ?? "",
-    handle: "@akashjana",
     displayPath: "dev.to/akashjana",
     sameAs: true,
   },
   {
     label: "Medium",
     href: env.mediumUrl ?? "",
-    handle: "@akashjana663",
     displayPath: "medium/akashjana663",
     sameAs: true,
   },
@@ -51,7 +46,7 @@ export const siteConfig: SiteConfig = {
     name: "Akash Jana",
     givenName: "Akash",
     familyName: "Jana",
-    role: "Fullstack Engineer | Rust, TypeScript",
+    role: "Fullstack Engineer | Rust · TypeScript",
     summary:
       "Hi, I’m Akash a full-stack developer building web products, developer tools, and trading infrastructure. I work across TypeScript and modern web stacks, with deeper systems experience in Rust and hands-on work in the Solana ecosystem.",
     location: "Mumbai, IN",
@@ -63,7 +58,6 @@ export const siteConfig: SiteConfig = {
     solanaAddress: "akashwkxo63PraND3jqvUe1VZz4EGirXsGNPdcBYHKX",
     githubUsername: env.githubUsername,
     portraitUrl: "/formal-me.jpg",
-    resumeUrl: env.resumeUrl,
   },
   summary: [
     [
@@ -123,7 +117,6 @@ export const siteConfig: SiteConfig = {
     {
       label: "GitHub",
       href: `https://github.com/${env.githubUsername}`,
-      handle: `@${env.githubUsername}`,
       displayPath: `github/${env.githubUsername}`,
       sameAs: true,
     },
@@ -137,9 +130,7 @@ export const siteConfig: SiteConfig = {
       description:
         "Rust-first trading infrastructure focused on fast, reliable execution paths.",
       primaryLanguage: "Rust",
-      topics: ["rust", "trading", "infrastructure"],
       stars: 0,
-      forks: 0,
       url: "https://github.com/AkashJana18/edgerunner",
       homepageUrl: null,
     },
@@ -150,9 +141,7 @@ export const siteConfig: SiteConfig = {
       description:
         "A compact central limit order book perpetual futures exchange built in Rust.",
       primaryLanguage: "TypeScript",
-      topics: ["orderbook", "rust"],
       stars: 0,
-      forks: 0,
       url: "https://github.com/AkashJana18/perplab",
       homepageUrl: null,
     },
@@ -163,9 +152,7 @@ export const siteConfig: SiteConfig = {
       description:
         "Persistent scratchpads for Herdr, paving the way for floating utility panes.",
       primaryLanguage: "Rust",
-      topics: ["cli", "rust"],
       stars: 0,
-      forks: 0,
       url: "https://github.com/AkashJana18/herdr-scratch",
       homepageUrl: null,
     },
@@ -175,9 +162,7 @@ export const siteConfig: SiteConfig = {
       displayName: "Glyphix",
       description: "A GIF-to-ASCII terminal renderer written in Rust.",
       primaryLanguage: "Rust",
-      topics: ["cli", "rust", "terminal"],
       stars: 1,
-      forks: 0,
       url: "https://github.com/AkashJana18/glyphix",
       homepageUrl: "https://youtu.be/Fd0-qCSlU10?si=rOt4YK5eRtzltAYl",
     },

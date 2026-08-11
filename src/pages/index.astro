@@ -89,6 +89,7 @@ const formatStatusTime = (date: Date) =>
               fallbackFormat="webp"
               quality="mid"
               priority
+              draggable="false"
               onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
             />
           </figure>
@@ -133,10 +134,7 @@ const formatStatusTime = (date: Date) =>
         </div>
 
         <div class="profile-notes">
-          <section
-            class="summary section-block"
-            aria-labelledby="summary-title"
-          >
+          <section class="section-block" aria-labelledby="summary-title">
             <h2 id="summary-title">Summary</h2>
             <div class="prose-stack">
               {

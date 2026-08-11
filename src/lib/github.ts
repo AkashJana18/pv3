@@ -24,25 +24,15 @@ const repositorySchema = z.object({
       name: z.string(),
     })
     .nullable(),
-  repositoryTopics: z.object({
-    nodes: z.array(
-      z.object({
-        topic: z.object({ name: z.string() }),
-      })
-    ),
-  }),
   stargazerCount: z.number().int().nonnegative(),
-  forkCount: z.number().int().nonnegative(),
   url: z.string(),
   homepageUrl: z.string().nullable(),
-  updatedAt: z.string(),
 })
 
 const pullRequestSchema = z.object({
   id: z.string(),
   title: z.string(),
   url: z.string(),
-  number: z.number().int().nonnegative(),
   mergedAt: z.string().nullable(),
   repository: z
     .object({
@@ -61,7 +51,6 @@ const githubResponseSchema = z.object({
           }),
           contributionsCollection: z.object({
             contributionCalendar: z.object({
-              totalContributions: z.number().int().nonnegative(),
               weeks: z.array(
                 z.object({
                   contributionDays: z.array(contributionDaySchema),
@@ -89,20 +78,14 @@ const PORTFOLIO_QUERY = `
             name
             description
             primaryLanguage { name }
-            repositoryTopics(first: 8) {
-              nodes { topic { name } }
-            }
             stargazerCount
-            forkCount
             url
             homepageUrl
-            updatedAt
           }
         }
       }
       contributionsCollection(from: $from, to: $to) {
         contributionCalendar {
-          totalContributions
           weeks {
             contributionDays { contributionCount date }
           }
@@ -117,7 +100,6 @@ const PORTFOLIO_QUERY = `
           id
           title
           url
-          number
           mergedAt
           repository { nameWithOwner }
         }
@@ -246,12 +228,9 @@ function normalizeProject(
     description:
       project.description?.trim() || "Open-source project by Akash Jana.",
     primaryLanguage: project.primaryLanguage?.name ?? null,
-    topics: project.repositoryTopics.nodes.map((node) => node.topic.name),
     stars: project.stargazerCount,
-    forks: project.forkCount,
     url,
     homepageUrl: safeHttpUrl(project.homepageUrl),
-    updatedAt: project.updatedAt,
   }
 }
 
@@ -266,7 +245,6 @@ function normalizePullRequest(
       id: pullRequest.id,
       title: pullRequest.title,
       url,
-      number: pullRequest.number,
       mergedAt: pullRequest.mergedAt,
       repositoryName: pullRequest.repository?.nameWithOwner ?? "GitHub",
     },

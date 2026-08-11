@@ -11,7 +11,6 @@
   --foreground: #202633;
   --muted-foreground: #5d6878;
   --quiet-foreground: #626d7d;
-  --border: #e3e7ec;
   --soft-background: #f6f7f9;
   --selection-background: #d9e0e8;
   --focus: #1d4ed8;
@@ -31,7 +30,6 @@
   --foreground: #e7ebf1;
   --muted-foreground: #abb5c3;
   --quiet-foreground: #9ba7b7;
-  --border: #2b3441;
   --soft-background: #151c26;
   --selection-background: #334155;
   --focus: #93c5fd;
@@ -267,6 +265,7 @@ a:focus-visible {
   margin: 0;
   overflow: hidden;
   background: var(--soft-background);
+  user-select: none;
 }
 
 .portrait img {
@@ -275,6 +274,8 @@ a:focus-visible {
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: 54% 50%;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .portrait picture {
@@ -302,13 +303,13 @@ a:focus-visible {
   text-align: center;
 }
 
+.solana-address:hover {
+  color: var(--foreground);
+}
+
 .solana-address:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
-}
-
-.profile-socials {
-  position: relative;
 }
 
 .profile-socials ul {
@@ -473,6 +474,10 @@ a:focus-visible {
   aspect-ratio: 1;
   border-radius: 0.12rem;
   background: var(--green-0);
+}
+
+.graph-day--placeholder {
+  visibility: hidden;
 }
 
 .graph-day[data-level="1"] {
