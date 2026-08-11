@@ -40,6 +40,8 @@
     const storageKey = "portfolio-theme"
     const button = document.querySelector("#theme-toggle")
     const preference = window.matchMedia("(prefers-color-scheme: dark)")
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let transitionTimer
 
     if (!(button instanceof HTMLButtonElement)) return
 
@@ -52,19 +54,31 @@
       }
     }
 
-    const applyTheme = (theme) => {
+    const applyTheme = (theme, animate = false) => {
       const isDark = theme === "dark"
       const nextLabel = isDark ? "Switch to light mode" : "Switch to dark mode"
       const themeColor = document.querySelector('meta[name="theme-color"]')
+      const root = document.documentElement
 
-      document.documentElement.dataset.theme = theme
-      document.documentElement.style.colorScheme = theme
+      if (animate && !reducedMotion.matches) {
+        window.clearTimeout(transitionTimer)
+        root.dataset.themeTransition = ""
+      }
+
+      root.dataset.theme = theme
+      root.style.colorScheme = theme
       button.setAttribute("aria-pressed", String(isDark))
       button.setAttribute("aria-label", nextLabel)
       button.title = nextLabel
 
       if (themeColor instanceof HTMLMetaElement) {
         themeColor.content = isDark ? "#0d1117" : "#ffffff"
+      }
+
+      if (animate && !reducedMotion.matches) {
+        transitionTimer = window.setTimeout(() => {
+          delete root.dataset.themeTransition
+        }, 150)
       }
     }
 
@@ -78,7 +92,7 @@
         // The theme still works when storage is unavailable.
       }
 
-      applyTheme(nextTheme)
+      applyTheme(nextTheme, true)
     })
 
     preference.addEventListener("change", (event) => {

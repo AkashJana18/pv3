@@ -24,13 +24,15 @@ const structuredData = getStructuredData({
 })
 const githubUrl = `https://github.com/${siteConfig.person.githubUsername}`
 const articleDate = new Intl.DateTimeFormat("en-GB", {
-  day: "2-digit",
-  month: "2-digit",
+  day: "numeric",
+  month: "numeric",
   year: "2-digit",
 })
+const formatArticleDate = (date: Date) =>
+  articleDate.format(date).replace(/\b0(?=\d)/g, "")
 const statusTime = new Intl.DateTimeFormat("en-IN", {
   timeZone: siteConfig.person.timeZone,
-  hour: "2-digit",
+  hour: "numeric",
   minute: "2-digit",
   hour12: true,
 })
@@ -55,7 +57,7 @@ const formatStatusTime = (date: Date) =>
             >
               {formatStatusTime(new Date())}
             </time>
-            <span>{`, ${siteConfig.person.location}`}</span>
+            <span>{`${siteConfig.person.location}`}</span>
             <span
               id="weather-status"
               class="weather-status"
@@ -65,31 +67,70 @@ const formatStatusTime = (date: Date) =>
               title="Weather data by Open-Meteo"
               aria-live="polite"
             >
-              <span aria-hidden="true">,</span>
               <span class="weather-copy">--°C</span>
               <span class="weather-icon" aria-hidden="true">🌤️</span>
             </span>
           </p>
         </header>
 
-        <figure class="portrait">
-          <Picture
-            src={portraitImage}
-            alt={`Akash Jana outdoors in front of green foliage`}
-            width={720}
-            height={900}
-            widths={[320, 480, 640, 720]}
-            sizes="(min-width: 900px) 24rem, 100vw"
-            layout="constrained"
-            fit="cover"
-            position="54% 50%"
-            formats={["avif", "webp"]}
-            fallbackFormat="webp"
-            quality="mid"
-            priority
-            onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
-          />
-        </figure>
+        <div class="portrait-block">
+          <figure class="portrait">
+            <Picture
+              src={portraitImage}
+              alt={`Akash Jana outdoors in front of green foliage`}
+              width={720}
+              height={900}
+              widths={[320, 480, 640, 720]}
+              sizes="(min-width: 900px) 24rem, 100vw"
+              layout="constrained"
+              fit="cover"
+              position="54% 50%"
+              formats={["avif", "webp"]}
+              fallbackFormat="webp"
+              quality="mid"
+              priority
+              onerror="this.onerror=null;this.parentElement?.querySelectorAll('source').forEach((source)=>source.remove());this.srcset='';this.src='/formal-me.jpg'"
+            />
+          </figure>
+
+          <button
+            id="solana-address"
+            class="solana-address"
+            type="button"
+            data-address={siteConfig.person.solanaAddress}
+            aria-label={`Copy Solana address ${siteConfig.person.solanaAddress}`}
+          >
+            <span aria-hidden="true">{siteConfig.person.solanaAddress}</span>
+          </button>
+          <span id="solana-copy-status" class="sr-only" aria-live="polite"
+          ></span>
+
+          <nav class="profile-socials" aria-label="Social profiles">
+            <ul>
+              {
+                siteConfig.socialLinks.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      target={
+                        link.href.startsWith("http") ? "_blank" : undefined
+                      }
+                      rel={
+                        link.href.startsWith("http")
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
+                      aria-label={`${link.label}: ${link.displayPath ?? link.label}`}
+                      title={link.displayPath ?? link.label}
+                    >
+                      <SocialIcon name={link.label} />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
 
         <div class="profile-notes">
           <section
@@ -129,10 +170,7 @@ const formatStatusTime = (date: Date) =>
                 ))
               }
             </div>
-            <p class="availability">
-              Open to full-stack engineering opportunities, including Rust and
-              Solana-focused work.
-            </p>
+            <p class="availability">Open to fulltime opportunities.</p>
           </section>
         </div>
       </div>
@@ -218,7 +256,7 @@ const formatStatusTime = (date: Date) =>
               {writings.articles.map((article) => (
                 <li>
                   <time datetime={article.publishedAt}>
-                    {articleDate.format(new Date(article.publishedAt))}
+                    {formatArticleDate(new Date(article.publishedAt))}
                   </time>
                   <a
                     href={article.url}
@@ -239,58 +277,6 @@ const formatStatusTime = (date: Date) =>
         }
       </section>
     </div>
-
-    <footer class="site-footer">
-      <nav aria-label="Connect">
-        <h2 class="footer-heading">Connect</h2>
-        <ul class="footer-links">
-          {
-            siteConfig.socialLinks.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    link.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                >
-                  <SocialIcon name={link.label} />
-                  <span class="footer-label">{link.label}</span>
-                  <span class="footer-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                  {link.handle && (
-                    <span class="footer-handle">({link.handle})</span>
-                  )}
-                </a>
-              </li>
-            ))
-          }
-          {
-            siteConfig.person.resumeUrl && (
-              <li>
-                <a
-                  href={siteConfig.person.resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <SocialIcon name="Résumé" />
-                  <span class="footer-label">Résumé</span>
-                  <span class="footer-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
-              </li>
-            )
-          }
-        </ul>
-      </nav>
-      <span class="copyright">
-        {`© ${new Date().getFullYear()} ${siteConfig.person.name}`}
-      </span>
-    </footer>
   </main>
 
   <script is:inline>
@@ -299,7 +285,7 @@ const formatStatusTime = (date: Date) =>
       if (clock instanceof HTMLTimeElement) {
         const formatter = new Intl.DateTimeFormat("en-IN", {
           timeZone: clock.dataset.timeZone || "Asia/Kolkata",
-          hour: "2-digit",
+          hour: "numeric",
           minute: "2-digit",
           hour12: true,
         })
@@ -314,6 +300,61 @@ const formatStatusTime = (date: Date) =>
 
         update()
         window.setInterval(update, 60_000)
+      }
+
+      const addressButton = document.querySelector("#solana-address")
+      const copyStatus = document.querySelector("#solana-copy-status")
+
+      if (addressButton instanceof HTMLButtonElement) {
+        const fallbackCopy = (value) => {
+          const textArea = document.createElement("textarea")
+          textArea.value = value
+          textArea.readOnly = true
+          textArea.style.position = "fixed"
+          textArea.style.left = "-9999px"
+          document.body.append(textArea)
+          textArea.select()
+
+          const copied = document.execCommand("copy")
+          textArea.remove()
+          addressButton.focus({ preventScroll: true })
+
+          if (!copied) throw new Error("Copy command failed")
+        }
+
+        const copyAddress = async (value) => {
+          if (navigator.clipboard?.writeText) {
+            try {
+              await navigator.clipboard.writeText(value)
+              return
+            } catch {
+              fallbackCopy(value)
+              return
+            }
+          }
+
+          fallbackCopy(value)
+        }
+
+        const announce = (message) => {
+          if (!(copyStatus instanceof HTMLElement)) return
+          copyStatus.textContent = ""
+          window.setTimeout(() => {
+            copyStatus.textContent = message
+          }, 0)
+        }
+
+        addressButton.addEventListener("click", async () => {
+          const address = addressButton.dataset.address
+          if (!address) return
+
+          try {
+            await copyAddress(address)
+            announce("Solana address copied to clipboard.")
+          } catch {
+            announce("Could not copy the Solana address. Try again.")
+          }
+        })
       }
 
       const weather = document.querySelector("#weather-status")
@@ -370,11 +411,8 @@ const formatStatusTime = (date: Date) =>
           icon.ariaHidden = "true"
           icon.textContent = emoji
           copy.className = "weather-copy"
-          copy.textContent = `${Math.round(temperature)}°C, ${condition}`
-          const separator = document.createElement("span")
-          separator.ariaHidden = "true"
-          separator.textContent = ","
-          weather.replaceChildren(separator, copy, icon)
+          copy.textContent = `${Math.round(temperature)}°C ${condition}`
+          weather.replaceChildren(copy, icon)
           weather.ariaLabel = `${Math.round(temperature)} degrees Celsius, ${condition}; data by Open-Meteo`
         })
         .catch(() => {

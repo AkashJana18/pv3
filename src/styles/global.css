@@ -13,6 +13,7 @@
   --quiet-foreground: #626d7d;
   --border: #e3e7ec;
   --soft-background: #f6f7f9;
+  --selection-background: #d9e0e8;
   --focus: #1d4ed8;
   --green-0: #edf2ef;
   --green-1: #bbebc8;
@@ -32,6 +33,7 @@
   --quiet-foreground: #9ba7b7;
   --border: #2b3441;
   --soft-background: #151c26;
+  --selection-background: #334155;
   --focus: #93c5fd;
   --green-0: #17231b;
   --green-1: #1d4d2b;
@@ -90,7 +92,7 @@ a:focus-visible {
 }
 
 ::selection {
-  background: var(--green-1);
+  background: var(--selection-background);
   color: var(--foreground);
 }
 
@@ -114,20 +116,19 @@ a:focus-visible {
   position: fixed;
   z-index: 5;
   top: clamp(1rem, 3vw, 2rem);
-  right: var(--page-gutter);
+  right: clamp(1rem, 2vw, 2rem);
   display: inline-grid;
   width: 2.75rem;
   height: 2.75rem;
   place-items: center;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 50%;
-  background: var(--background);
+  background: transparent;
   color: var(--muted-foreground);
   cursor: pointer;
 }
 
 .theme-toggle:hover {
-  background: var(--soft-background);
   color: var(--foreground);
 }
 
@@ -185,9 +186,8 @@ a:focus-visible {
   max-width: 45rem;
 }
 
-.portrait {
+.portrait-block {
   grid-area: portrait;
-  margin: 0;
 }
 
 .activity {
@@ -211,7 +211,7 @@ a:focus-visible {
 .section-block > h2,
 .section-heading-row h2 {
   margin: 0;
-  color: var(--quiet-foreground);
+  color: var(--foreground);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -237,7 +237,7 @@ a:focus-visible {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0;
+  gap: 0.2rem 1rem;
   margin: 0.35rem 0 0;
   color: var(--quiet-foreground);
   font-size: 1rem;
@@ -255,9 +255,16 @@ a:focus-visible {
   line-height: 1;
 }
 
-.portrait {
+.portrait-block {
+  display: grid;
   width: min(78vw, 19rem);
   justify-self: end;
+  min-width: 0;
+}
+
+.portrait {
+  width: 100%;
+  margin: 0;
   overflow: hidden;
   background: var(--soft-background);
 }
@@ -272,6 +279,69 @@ a:focus-visible {
 
 .portrait picture {
   display: block;
+}
+
+.solana-address {
+  display: flex;
+  width: 100%;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  overflow-wrap: anywhere;
+  border: 0;
+  border-radius: 0.15rem;
+  appearance: none;
+  background: transparent;
+  color: var(--quiet-foreground);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.solana-address:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.profile-socials {
+  position: relative;
+}
+
+.profile-socials ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-socials li {
+  display: flex;
+}
+
+.profile-socials a {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--quiet-foreground);
+  text-decoration: none;
+}
+
+.profile-socials a:hover {
+  background: var(--soft-background);
+  color: var(--foreground);
+}
+
+.profile-socials .social-icon {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .section-block {
@@ -471,6 +541,7 @@ a:focus-visible {
   color: var(--quiet-foreground);
   font-size: 1rem;
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .writing-list a {
@@ -487,71 +558,10 @@ a:focus-visible {
   color: var(--foreground);
 }
 
-.site-footer {
-  display: grid;
-  gap: 1.75rem;
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-  border-top: 1px solid var(--border);
-  padding-top: 1rem;
-  color: var(--quiet-foreground);
-  font-size: 1rem;
-}
-
-.site-footer nav {
-  display: grid;
-  gap: 0.85rem;
-}
-
-.footer-heading {
-  margin: 0;
-  color: var(--quiet-foreground);
-  font-size: 1.35rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-}
-
-.site-footer ul {
-  display: grid;
-  gap: 0.8rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.site-footer a {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  min-height: 2.75rem;
-  color: var(--foreground);
-  text-decoration: none;
-}
-
-.footer-label,
-.footer-arrow {
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-}
-
-.footer-arrow {
-  margin-left: -0.2rem;
-}
-
-.footer-handle {
-  color: var(--muted-foreground);
-}
-
 .social-icon {
   width: 1.1rem;
   height: 1.1rem;
   flex: none;
-}
-
-.copyright {
-  white-space: nowrap;
 }
 
 .not-found {
@@ -613,7 +623,7 @@ a:focus-visible {
     align-items: start;
   }
 
-  .portrait {
+  .portrait-block {
     width: 100%;
     align-self: start;
   }
@@ -633,7 +643,7 @@ a:focus-visible {
     column-gap: clamp(2.5rem, 7vw, 4.5rem);
   }
 
-  .portrait {
+  .portrait-block {
     width: 100%;
   }
 }
@@ -651,6 +661,22 @@ a:focus-visible {
   .project-line {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-theme-transition],
+  :root[data-theme-transition] *,
+  :root[data-theme-transition] *::before,
+  :root[data-theme-transition] *::after {
+    transition:
+      color 150ms ease-in-out,
+      background-color 150ms ease-in-out,
+      border-color 150ms ease-in-out,
+      text-decoration-color 150ms ease-in-out,
+      fill 150ms ease-in-out,
+      stroke 150ms ease-in-out;
+    transition-delay: 0s;
   }
 }
 

@@ -61,6 +61,7 @@ export type SocialLink = {
   label: string
   href: string
   handle?: string | undefined
+  displayPath?: string | undefined
   sameAs?: boolean
 }
 
@@ -92,6 +93,7 @@ export type SiteConfig = {
       latitude: number
       longitude: number
     }
+    solanaAddress: string
     githubUsername: string
     portraitUrl: string
     resumeUrl?: string | undefined
