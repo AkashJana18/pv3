@@ -29,12 +29,10 @@
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^11.0.4",
     "astro": "^7.1.6",
-    "dev": "^0.1.5",
     "fast-xml-parser": "^5.10.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "lighthouse": "^13.4.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",

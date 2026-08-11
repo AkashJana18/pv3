@@ -9,6 +9,13 @@ type Props = {
 
 const { calendar, source, profileUrl } = Astro.props
 const monthFormatter = new Intl.DateTimeFormat("en", { month: "short" })
+const displayedWeeks = calendar.weeks.map((week) => {
+  const daysByWeekday = new Map(
+    week.map((day) => [new Date(`${day.date}T00:00:00Z`).getUTCDay(), day])
+  )
+
+  return Array.from({ length: 7 }, (_, weekday) => daysByWeekday.get(weekday))
+})
 const monthLabels = calendar.weeks.flatMap((week, index, weeks) => {
   const day = week.find(Boolean)
   if (!day) return []
@@ -48,15 +55,19 @@ const description =
   </div>
   <div class="graph-weeks" aria-hidden="true">
     {
-      calendar.weeks.map((week) => (
+      displayedWeeks.map((week) => (
         <div class="graph-week">
-          {week.map((day) => (
-            <span
-              class="graph-day"
-              data-level={day.level}
-              title={`${day.count} contributions on ${day.date}`}
-            />
-          ))}
+          {week.map((day) =>
+            day ? (
+              <span
+                class="graph-day"
+                data-level={day.level}
+                title={`${day.count} contributions on ${day.date}`}
+              />
+            ) : (
+              <span class="graph-day graph-day--placeholder" />
+            )
+          )}
         </div>
       ))
     }

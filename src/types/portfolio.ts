@@ -15,7 +15,6 @@ export type PullRequest = {
   id: string
   title: string
   url: string
-  number: number
   mergedAt: string
   repositoryName: string
 }
@@ -26,12 +25,9 @@ export type Project = {
   displayName: string
   description: string
   primaryLanguage: string | null
-  topics: string[]
   stars: number
-  forks: number
   url: string
   homepageUrl: string | null
-  updatedAt?: string
 }
 
 export type GitHubPortfolio = {
@@ -60,7 +56,6 @@ export type WritingResult = {
 export type SocialLink = {
   label: string
   href: string
-  handle?: string | undefined
   displayPath?: string | undefined
   sameAs?: boolean
 }
@@ -96,7 +91,6 @@ export type SiteConfig = {
     solanaAddress: string
     githubUsername: string
     portraitUrl: string
-    resumeUrl?: string | undefined
   }
   summary: SummaryLine[]
   socialLinks: SocialLink[]
