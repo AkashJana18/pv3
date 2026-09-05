@@ -394,18 +394,13 @@ a:focus-visible {
 
 .availability {
   margin: 1.1rem 0 0;
-  font-size: 0.92rem;
-  font-weight: 600;
   line-height: 1.5;
 }
 
-.contact-cta {
-  margin: 0.75rem 0 0;
-}
-
-.contact-cta a {
+.availability a {
   color: var(--foreground);
-  font-weight: 500;
+  font-size: 0.92rem;
+  font-weight: 600;
   text-underline-offset: 0.25em;
 }
 

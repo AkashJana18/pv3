@@ -7,7 +7,6 @@ import SocialIcon from "@/components/SocialIcon.astro"
 import { siteConfig } from "@/config/site"
 import BaseLayout from "@/layouts/BaseLayout.astro"
 import { loadPortfolioData } from "@/lib/data"
-import { env } from "@/lib/env"
 import { getStructuredData } from "@/lib/structured-data"
 
 const SIX_HOURS = 60 * 60 * 6
@@ -169,19 +168,16 @@ const formatStatusTime = (date: Date) =>
                 ))
               }
             </div>
-            <p class="availability">Open to fulltime opportunities.</p>
-            {
-              env.contactEmail && (
-                <p class="contact-cta">
-                  <a
-                    href={`mailto:${env.contactEmail}?subject=Potential%20opportunity`}
-                  >
-                    Let&apos;s build something useful
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                </p>
-              )
-            }
+            <p class="availability">
+              <a
+                href="https://www.upwork.com/freelancers/~017c53bd9aa2202014"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open to fulltime opportunities
+                <span aria-hidden="true">↗</span>
+              </a>
+            </p>
           </section>
         </div>
       </div>
