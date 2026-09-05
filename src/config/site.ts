@@ -115,6 +115,11 @@ export const siteConfig: SiteConfig = {
   ],
   socialLinks: [
     {
+      label: "Resume",
+      href: "https://docs.google.com/document/d/1ZEB2qfWA-YcXHADFW91dbYcxe2Kv_4CUmnzwDlcH6xc/edit?usp=sharing",
+      displayPath: "resume",
+    },
+    {
       label: "GitHub",
       href: `https://github.com/${env.githubUsername}`,
       displayPath: `github/${env.githubUsername}`,
