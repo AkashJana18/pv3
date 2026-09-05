@@ -36,9 +36,9 @@ const optionalSocialLinks: SocialLink[] = [
 export const siteConfig: SiteConfig = {
   site: {
     name: "Akash Jana",
-    title: "Akash",
+    title: "Akash Jana - Full-Stack Engineer | TypeScript, Rust & Solana",
     description:
-      "Portfolio of Akash Jana, a full-stack developer building web products, developer tools, and open-source software with TypeScript, Rust and Solana.",
+      "Akash Jana is a full-stack engineer building web products, developer tools, and trading infrastructure with TypeScript, Rust, and Solana.",
     url: env.siteUrl,
     locale: "en_IN",
   },
@@ -114,6 +114,11 @@ export const siteConfig: SiteConfig = {
     ],
   ],
   socialLinks: [
+    {
+      label: "Resume",
+      href: "https://docs.google.com/document/d/1ZEB2qfWA-YcXHADFW91dbYcxe2Kv_4CUmnzwDlcH6xc/edit?usp=sharing",
+      displayPath: "resume",
+    },
     {
       label: "GitHub",
       href: `https://github.com/${env.githubUsername}`,
