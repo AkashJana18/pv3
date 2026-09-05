@@ -24,7 +24,7 @@
     "node": ">=24.x",
     "pnpm": ">=11"
   },
-  "packageManager": "pnpm@11.13.0",
+  "packageManager": "pnpm@11.13.1",
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/vercel": "^11.0.4",
